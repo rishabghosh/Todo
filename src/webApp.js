@@ -54,22 +54,39 @@ const readArgs = text => {
   return args;
 };
 
-const addNewTodo = function(req, res) {
-  const currentTodo = readArgs(req.body);
+const readPrevTodos = function(){
   const todoList = fs.readFileSync("./dataBase/todoList.json", "utf8");
-  const prevTodo = JSON.parse(todoList);
-  prevTodo.push(currentTodo);
-  fs.writeFile("./dataBase/todoList.json", JSON.stringify(prevTodo), err => console.log(err));
+  return JSON.parse(todoList);
 };
 
+const PREV_TODO = readPrevTodos();
 
+const addNewTodo = function(req, res) {
+  const currentTodo = readArgs(req.body);
+  PREV_TODO.push(currentTodo);
+  fs.writeFile("./dataBase/todoList.json", JSON.stringify(PREV_TODO), err =>
+    console.log(err)
+  );
+};
+
+const getTodoTable = function(todoList) {
+  console.log(todoList);
+  return todoList
+    .map(eachTodo => {
+      return `<tr> <td> ${eachTodo.Title} </td> <td> ${
+        eachTodo.Description
+      }</td> </tr>`;
+    })
+    .join("");
+};
 
 const renderHomepage = function(req, res) {
   fs.readFile("./public/homepage.html", (err, data) => {
-    const html = data.toString();
-    const message = html.replace("<!--todo_lists-->", "hi this is replaced");
     addNewTodo(req, res);
-    sendData(req, res, html);
+    const html = data.toString();
+    const message = html.replace("<!--todo_lists-->", getTodoTable(PREV_TODO));
+    // console.log(message);
+    sendData(req, res, message);
   });
 };
 

@@ -9,18 +9,17 @@
 }
 
 table {
-	border: 1px solid black;
+  border-collapse: collapse;
 }
 
 td {
-	padding: 5px;
-	width: 200px;
-	border-right: 1px solid black;
-	
+  padding: 5px;
+  width: 200px;
+  border: 1px solid black;
 }
 
 .todo_list {
   width: 500px;
-	border: 1px solid black;
-	padding: 15px;
+  border: 1px solid black;
+  padding: 15px;
 }

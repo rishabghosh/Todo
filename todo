@@ -9,11 +9,11 @@
    * create a webApp
    * 
 ***** webApp *****
-   *  creating index.html 
-   *  for root url it show index.html
-   *  for clicking login should go to homepage
-   *  render the homepage
-
+   *  submited todo should shown in the same page
+   *  static files should be cached before server starts
+   
+***** ui *****
+   * text area , required to avoid empty things
 ======= Deadline =======
    *  View their to-do list(s)
    *  Edit a to-do list

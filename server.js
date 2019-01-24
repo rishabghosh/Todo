@@ -1,13 +1,10 @@
 const http = require("http");
+const app = require("./src/webApp.js");
+
 
 const PORT = 7000;
 
-const server = http.createServer(function (req, res) {
-  console.log("one req came");
-  res.write("server responded");
-  res.end();
-});
-
+const server = http.createServer(app);
 
 
 server.listen(PORT, () => console.log("listening on ", PORT));

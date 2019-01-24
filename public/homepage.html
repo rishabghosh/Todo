@@ -3,14 +3,29 @@
   <head>
     <title>Todo-home</title>
     <link rel="stylesheet" type="text/css" href="/style/homepage.css" />
-    <script src="main.js"></script>
+    <script src="js/homepage.js"></script>
   </head>
 
   <body>
-		<h1>its a todo homepage</h1>
-		
-    <form method="POST" action="" class="todo_form">
 
+		<form method="POST"	action="/">
+			<input type="submit" value="Logout">
+		</form>
+
+<div class="container">
+
+	<div class="todo_list">
+		<h2>Todos</h2>
+		<table id="todo_table">
+			<tr>
+				<td>Date</td>
+				<td>Title</td>
+			</tr>
+			<!--todo_lists-->
+		</table>
+	</div>
+
+    <form method="POST" action="" class="todo_form">
 			<p><label>Title</label></p>
 			<p><textarea name="Title" id="title" rows="2" cols="100" ></textarea></p>
 
@@ -19,6 +34,7 @@
 
 			<p><input type="submit" value="Submit" /></p>
 		</form>
+		</div>
 		
   </body>
 </html>

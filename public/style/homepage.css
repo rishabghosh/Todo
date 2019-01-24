@@ -1,4 +1,26 @@
 .todo_form {
-	text-align: center;
-	font-size: 25px;
+  text-align: center;
+  font-size: 25px;
+  padding: 20px;
+}
+
+.container {
+  display: flex;
+}
+
+table {
+	border: 1px solid black;
+}
+
+td {
+	padding: 5px;
+	width: 200px;
+	border-right: 1px solid black;
+	
+}
+
+.todo_list {
+  width: 500px;
+	border: 1px solid black;
+	padding: 15px;
 }

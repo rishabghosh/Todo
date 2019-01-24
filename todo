@@ -1,3 +1,7 @@
+====== parking log =======
+   * create a login page in index.html
+
+
 **** focus ****
 	** creating a basic todo app without login and password
    * write tests for webFramework
@@ -7,5 +11,6 @@
 ***** webApp *****
    *  creating index.html 
    *  for root url it show index.html
-   *  
+   *  for clicking login should go to homepage
+   *  render the homepage
    *  

@@ -25,4 +25,22 @@ class Request {
   }
 }
 
-module.exports = { Request, Response };
+class FileSystem {
+  constructor() {
+    this.filenames = ["index.html", "homepage.html", "js", "style"];
+    this.htmlFiles = {
+      "./public/index.html": "0\n1\n2\n3\n4",
+      "./public/homepage.html": "abcd"
+    };
+  }
+
+  readdirSync(path) {
+    return this.filenames;
+  }
+
+  readFileSync(filePath, encodeing){
+    return this.htmlFiles[filePath];
+  }
+}
+
+module.exports = { Request, Response, FileSystem };

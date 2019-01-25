@@ -11,10 +11,10 @@
 
 
 ***** refactors *****
-   *  placeholders should be a object
-   *  should placeholders be in a seperate file?
-
-   *  functions for rendering pages should be in a seperate file
-   *  request handlers like serveFiles, readBody should be in seperate file
    *  utils functions should be in utils
    *  use cache to read files before server starts
+
+***** testing *****
+   * requestHandlers readBody and serveFiles
+   *  testing webApp
+   *  testing renderpages

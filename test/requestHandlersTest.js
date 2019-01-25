@@ -3,12 +3,13 @@
 const chai = require("chai");
 const assert = chai.assert;
 
-const { Response } = require("./simulators.js");
+const { Request, Response } = require("./simulators.js");
 
 const {
   sendData,
   sendNotFound,
-  getFilePath
+  getFilePath,
+  readBody
 } = require("../src/requestHandlers.js");
 
 const req = null;
@@ -54,5 +55,20 @@ describe("getFilePath", () => {
     const actualOutput = getFilePath(url);
     const expectedOutput = "./public/index.html";
     assert.strictEqual(actualOutput, expectedOutput);
+  });
+});
+
+describe("readBody", () => {
+  it("should read chunks form server and call the next functions", () => {
+    const req = new Request();
+    const res = new Response();
+    const expectedOutput = "some data";
+    
+    const asserter = function() {
+      const actualOutput = req.body;
+      assert.strictEqual(actualOutput, expectedOutput);
+    };
+
+    readBody(req, res, asserter);
   });
 });

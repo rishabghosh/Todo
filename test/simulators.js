@@ -4,13 +4,25 @@ class Response {
     this.statusCode = 200;
   }
 
-  write(data){
+  write(data) {
     this.body = data;
   }
 
-  end(){
+  end() {
     return this.body;
   }
 }
 
-module.exports = { Response };
+class Request {
+  constructor() {
+    this.body = "";
+    this.chunk = "some data";
+  }
+
+  on(event, callback) {
+    if (event === "data") callback(this.chunk);
+    if (event === "end") callback();
+  }
+}
+
+module.exports = { Request, Response };

@@ -1,9 +1,7 @@
 const fs = require("fs");
-
 const placeholders = require("./placeholders.js");
-
 const { sendData } = require("./requestHandlers.js");
-
+const PREV_TODO = require("../dataBase/todoList.json");
 
 const readArgs = text => {
   let args = {};
@@ -15,13 +13,6 @@ const readArgs = text => {
     .forEach(assignKeyValueToArgs);
   return args;
 };
-
-const readPrevTodos = function() {
-  const todoList = fs.readFileSync("./dataBase/todoList.json", "utf8");
-  return JSON.parse(todoList);
-};
-
-const PREV_TODO = readPrevTodos();
 
 const addNewTodo = function(req) {
   const currentTodo = readArgs(req.body);
@@ -41,14 +32,11 @@ const getTodoTable = function(todoList) {
     .join("");
 };
 
-const renderHomepage = function(req, res) {
-  fs.readFile("./public/homepage.html", (err, data) => {
-    addNewTodo(req, res);
-    const html = data.toString();
-    const todoTable = getTodoTable(PREV_TODO);
-    const message = html.replace(placeholders.forTodoList, todoTable);
-    sendData(req, res, message);
-  });
+const renderHomepage = function(homepage, req, res) {
+  addNewTodo(req);
+  const todoTable = getTodoTable(PREV_TODO);
+  const message = homepage.replace(placeholders.forTodoList, todoTable);
+  sendData(req, res, message);
 };
 
 module.exports = {

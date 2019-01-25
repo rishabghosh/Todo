@@ -2,6 +2,8 @@ const hasOnlyHandler = function (req, route) {
   return !(route.hasOwnProperty("method") && route.hasOwnProperty("url"));
 };
 
+
+//no need of giving req to has only handler, creates confusions
 const isMatching = function (req, route) {
   if (hasOnlyHandler(req, route)) return true;
   return req.url === route.url && req.method === route.method;

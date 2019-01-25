@@ -1,12 +1,8 @@
 /* eslint-env mocha */
 
-const assert = require("assert");
-const {
-  Framework,
-  isMatching
-} = require("../src/webFramework.js");
-
-
+const chai = require("chai");
+const assert = chai.assert;
+const { Framework, isMatching } = require("../src/webFramework.js");
 
 describe("Framework", () => {
   const sum = (a, b) => a + b;
@@ -39,17 +35,54 @@ describe("Framework", () => {
     assert.deepStrictEqual(framework.errorHandler, expectedOutput);
   });
 
-  /*
-  **  should add routes..
-  **  should mock req and res
-  **  +
-  */
-  it.skip("post method should push method as POST, url and handler into routes", () => {
-    const url = "/homepage";
-    const framework = new Framework();
-    const expectedOutput = [{ method: "POST", url: "/homepage", handler: sum }];
-    assert.deepStrictEqual(framework.routes, expectedOutput);
-  });
+  it("requestHandler method should invoke functions of matching routes with req and res", () => {
+    const asserter = (req, res) => {
+      assert.deepStrictEqual({ req, res }, { req: "request", res: "response" });
+    };
 
+    const framework = new Framework();
+    framework.use(asserter);
+    framework.handleRequest("request", "response");
+  });
 });
 
+describe("isMatching", () => {
+  it("should return true if url and method are same for request and route", () => {
+    const request = { url: "/", method: "POST" };
+    const route = { url: "/", method: "POST", handler: () => {} };
+    const expectedOutput = true;
+    const actualOutput = isMatching(request, route);
+    assert.strictEqual(actualOutput, expectedOutput);
+  });
+
+  it("should return false if url is same but method is different for request and route", () => {
+    const request = { url: "/", method: "POST" };
+    const route = { url: "/", method: "GET", handler: () => {} };
+    const expectedOutput = false;
+    const actualOutput = isMatching(request, route);
+    assert.strictEqual(actualOutput, expectedOutput);
+  });
+
+  it("should return false if url is different but method is same for request and route", () => {
+    const request = { url: "/login", method: "POST" };
+    const route = { url: "/", method: "POST", handler: () => {} };
+    const expectedOutput = false;
+    const actualOutput = isMatching(request, route);
+    assert.strictEqual(actualOutput, expectedOutput);
+  });
+
+  it("should return false if url and method are different for request and route", () => {
+    const request = { url: "/login", method: "POST" };
+    const route = { url: "/", method: "GET", handler: () => {} };
+    const expectedOutput = false;
+    const actualOutput = isMatching(request, route);
+    assert.strictEqual(actualOutput, expectedOutput);
+  });
+
+  it("should return true if route has only handler", () => {
+    const route = { handler: () => {} };
+    const expectedOutput = true;
+    const actualOutput = isMatching(null, route);
+    assert.strictEqual(actualOutput, expectedOutput);
+  });
+});

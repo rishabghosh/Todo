@@ -27,11 +27,8 @@ class Request {
 
 class FileSystem {
   constructor() {
-    this.filenames = ["index.html", "homepage.html", "js", "style"];
-    this.htmlFiles = {
-      "./public/index.html": "0\n1\n2\n3\n4",
-      "./public/homepage.html": "abcd"
-    };
+    this.filenames = [];
+    this.fileContents = {};
   }
 
   readdirSync(path) {
@@ -39,7 +36,16 @@ class FileSystem {
   }
 
   readFileSync(filePath, encodeing){
-    return this.htmlFiles[filePath];
+    return this.fileContents[filePath];
+  }
+
+  readFile(path, callback) {
+    let error;
+    if (!this.fileContents[path]) {
+      error = "file not found";
+    }
+    const content = this.fileContents[path];
+    callback(error, content);
   }
 }
 

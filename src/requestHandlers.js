@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 const sendData = function(req, res, data) {
   res.statusCode = 200;
   res.write(data);
@@ -30,8 +28,9 @@ const readBody = function(req, res, next) {
   });
 };
 
-const serveFiles = function(req, res) {
+const serveFiles = function(fs, req, res) {
   const filePath = getFilePath(req.url);
+
   fs.readFile(filePath, (error, data) => {
     if (!error) {
       sendData(req, res, data);

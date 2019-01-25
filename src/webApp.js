@@ -13,7 +13,7 @@ const app = function(req, res) {
   const framework = new Framework();
   framework.use(readBody);
   framework.post("/homepage.html", renderHomepage.bind(null, HOMEPAGE_DATA));
-  framework.use(serveFiles);
+  framework.use(serveFiles.bind(null, fs));
   framework.handleRequest(req, res);
 };
 

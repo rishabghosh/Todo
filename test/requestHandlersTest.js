@@ -3,13 +3,14 @@
 const chai = require("chai");
 const assert = chai.assert;
 
-const { Request, Response } = require("./simulators.js");
+const { Request, Response, FileSystem } = require("./simulators.js");
 
 const {
   sendData,
   sendNotFound,
   getFilePath,
-  readBody
+  readBody,
+  serveFiles
 } = require("../src/requestHandlers.js");
 
 const req = null;
@@ -64,12 +65,42 @@ describe("readBody", () => {
     const req = new Request();
     req.receivedData = "some data";
     const expectedOutput = "some data";
-    
+
     const asserter = function() {
       const actualOutput = req.body;
       assert.strictEqual(actualOutput, expectedOutput);
     };
 
     readBody(req, res, asserter);
+  });
+});
+
+describe("serveFiles", () => {
+  const fs = new FileSystem();
+  (fs.fileContents["./public/index.html"] = "0\n1\n2\n3\n4"),
+  (fs.fileContents["./public/homepage.html"] = "abcd");
+
+  it("should serve a file if exists", () => {
+    const res = new Response();
+    const req = new Request();
+    req.url = "/homepage.html";
+
+    serveFiles(fs, req, res);
+    const actualOutput = res.body;
+    const expectedOutput = "abcd";
+
+    assert.strictEqual(actualOutput, expectedOutput);
+  });
+
+  it("should send error if file doesnot exist", () => {
+    const res = new Response();
+    const req = new Request();
+    req.url = "/badfile";
+
+    serveFiles(fs, req, res);
+    const actualOutput = res.body;
+    const expectedOutput = "Not Found";
+    
+    assert.strictEqual(actualOutput, expectedOutput);
   });
 });

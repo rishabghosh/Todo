@@ -54,7 +54,7 @@ const readArgs = text => {
   return args;
 };
 
-const readPrevTodos = function(){
+const readPrevTodos = function() {
   const todoList = fs.readFileSync("./dataBase/todoList.json", "utf8");
   return JSON.parse(todoList);
 };
@@ -98,4 +98,9 @@ const app = function(req, res) {
   framework.handleRequest(req, res);
 };
 
-module.exports = app;
+module.exports = {
+  app,
+  sendData,
+  sendNotFound,
+  getFilePath
+};

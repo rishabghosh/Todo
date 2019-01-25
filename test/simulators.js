@@ -16,11 +16,11 @@ class Response {
 class Request {
   constructor() {
     this.body = "";
-    this.chunk = "some data";
+    this.receivedData = "";
   }
 
   on(event, callback) {
-    if (event === "data") callback(this.chunk);
+    if (event === "data") callback(this.receivedData);
     if (event === "end") callback();
   }
 }

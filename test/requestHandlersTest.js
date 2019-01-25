@@ -60,8 +60,9 @@ describe("getFilePath", () => {
 
 describe("readBody", () => {
   it("should read chunks form server and call the next functions", () => {
-    const req = new Request();
     const res = new Response();
+    const req = new Request();
+    req.receivedData = "some data";
     const expectedOutput = "some data";
     
     const asserter = function() {

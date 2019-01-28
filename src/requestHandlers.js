@@ -4,9 +4,9 @@ const sendData = function(req, res, data) {
   res.end();
 };
 
-const sendNotFound = function(req, res) {
+const invalidRequest = function(req, res) {
   res.statusCode = 404;
-  res.write("Not Found");
+  res.write("Invalid Request");
   res.end();
 };
 
@@ -31,7 +31,7 @@ const serveFiles = function(fs, req, res) {
     if (!error) {
       sendData(req, res, data);
     } else {
-      sendNotFound(req, res);
+      invalidRequest(req, res);
     }
   });
 };
@@ -40,6 +40,6 @@ module.exports = {
   readBody,
   serveFiles,
   sendData,
-  sendNotFound,
+  invalidRequest,
   getFilePath
 };

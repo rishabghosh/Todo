@@ -4,7 +4,7 @@ const { sendData } = require("./requestHandlers.js");
 const PREV_TODO = require("../dataBase/todoList.json");
 
 const readArgs = text => {
-  let args = {};
+  let args = {}; 
   const splitKeyValue = pair => pair.split("=");
   const assignKeyValueToArgs = ([key, value]) => (args[key] = value);
   text

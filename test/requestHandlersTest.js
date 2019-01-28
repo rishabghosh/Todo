@@ -7,7 +7,7 @@ const { Request, Response, FileSystem } = require("./simulators.js");
 
 const {
   sendData,
-  sendNotFound,
+  invalidRequest,
   getFilePath,
   readBody,
   serveFiles
@@ -33,12 +33,12 @@ describe("sendData", () => {
   });
 });
 
-describe("sendNotFound", () => {
+describe("invalidRequest", () => {
   it("should modify the response body if sendNotFound is invoked", () => {
     const res = new Response();
-    sendNotFound(req, res);
+    invalidRequest(req, res);
     const actualOutput = res.body;
-    const expectedOutput = "Not Found";
+    const expectedOutput = "Invalid Request";
     assert.strictEqual(actualOutput, expectedOutput);
   });
 });
@@ -99,8 +99,8 @@ describe("serveFiles", () => {
 
     serveFiles(fs, req, res);
     const actualOutput = res.body;
-    const expectedOutput = "Not Found";
-    
+    const expectedOutput = "Invalid Request";
+
     assert.strictEqual(actualOutput, expectedOutput);
   });
 });

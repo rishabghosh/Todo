@@ -4,6 +4,9 @@ const { sendData, redirect } = require("./requestHandlers.js");
 const PREV_TODO = require("../dataBase/todoList.json");
 const USERS = require("../dataBase/users.json");
 const readArgs = require("./parser.js");
+const { EMPTY_STRING, ROOT, POST } = require("./constants.js");
+
+
 
 const addNewTodo = function(req) {
   const currentArg = readArgs(req.body);
@@ -23,11 +26,11 @@ const getTodoTable = function(todoList) {
         todo.Description
       }</td> </tr>`;
     })
-    .join("");
+    .join(EMPTY_STRING);
 };
 
 const renderHomepage = function(content, req, res) {
-  if (req.method === "POST") addNewTodo(req);
+  if (req.method === POST) addNewTodo(req);
   const todoTable = getTodoTable(PREV_TODO);
   let message = content.replace(placeholders.forTodoList, todoTable);
   sendData(req, res, message);
@@ -48,7 +51,7 @@ const checkLoginCredentials = function(req, res) {
     redirect(res, "/homepage");
     return;
   }
-  redirect(res, "/");
+  redirect(res, ROOT);
 };
 
 module.exports = {

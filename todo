@@ -27,8 +27,6 @@
       -  created user successfully
 
 ***** next *****
-   *  extract constants
    *  rename functions
    *  extract utils
    *  remove unnecessary else
-   *     

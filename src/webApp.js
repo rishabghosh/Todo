@@ -3,10 +3,10 @@ const { Framework } = require("./webFramework.js");
 const { renderHomepage, checkLoginCredentials } = require("./renderPages.js");
 const { readBody, serveFiles } = require("./requestHandlers.js");
 const { createCache } = require("./cache.js");
+const { HOMEPAGE_PATH } = require("./constants.js");
 
 const CACHE = createCache(fs);
-const HOMEPAGE = "./public/homepage.html"; // could be a better name?
-const HOMEPAGE_DATA = CACHE[HOMEPAGE];
+const HOMEPAGE_DATA = CACHE[HOMEPAGE_PATH];
 
 const app = function(req, res) {
   const framework = new Framework();

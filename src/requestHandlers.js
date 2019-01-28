@@ -1,3 +1,5 @@
+const { ERROR_MESSAGE, ROOT, DEFAULT_PAGE } = require("./constants.js");
+
 const sendData = function(req, res, data) {
   res.statusCode = 200;
   res.write(data);
@@ -6,7 +8,7 @@ const sendData = function(req, res, data) {
 
 const invalidRequest = function(req, res) {
   res.statusCode = 404;
-  res.write("Invalid Request");
+  res.write(ERROR_MESSAGE);
   res.end();
 };
 
@@ -17,7 +19,7 @@ const redirect = function(res, location) {
 };
 
 const getFilePath = function(url) {
-  return url === "/" ? "./public/index.html" : "./public" + url;
+  return url === ROOT ? DEFAULT_PAGE : "./public" + url;
 };
 
 const readBody = function(req, res, next) {
@@ -35,9 +37,9 @@ const serveFiles = function(fs, req, res) {
   fs.readFile(filePath, (error, data) => {
     if (!error) {
       sendData(req, res, data);
-    } else {
-      invalidRequest(req, res);
+      return;
     }
+    invalidRequest(req, res);
   });
 };
 

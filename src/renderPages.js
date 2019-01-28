@@ -2,36 +2,24 @@ const fs = require("fs");
 const placeholders = require("./placeholders.js");
 const { sendData } = require("./requestHandlers.js");
 const PREV_TODO = require("../dataBase/todoList.json");
-
-const readArgs = text => {
-  let args = {}; 
-  const splitKeyValue = pair => pair.split("=");
-  const assignKeyValueToArgs = ([key, value]) => (args[key] = value);
-  text
-    .split("&")
-    .map(splitKeyValue)
-    .forEach(assignKeyValueToArgs);
-  return args;
-};
+const readArgs = require("./parser.js");
 
 const addNewTodo = function(req) {
-  const currentTodo = readArgs(req.body);
-
-  if (currentTodo.hasOwnProperty("Title")) {
-    PREV_TODO.unshift(currentTodo);
+  const currentArg = readArgs(req.body);
+  if (currentArg.hasOwnProperty("Title")) {
+    PREV_TODO.unshift(currentArg);
+    const updatedList = JSON.stringify(PREV_TODO, null, 2);
+    fs.writeFile("./dataBase/todoList.json", updatedList, err =>
+      console.error(err)
+    );
   }
-
-  const updatedList = JSON.stringify(PREV_TODO, null, 2);
-  fs.writeFile("./dataBase/todoList.json", updatedList, err =>
-    console.error(err)
-  );
 };
 
 const getTodoTable = function(todoList) {
   return todoList
-    .map(eachTodo => {
-      return `<tr> <td> ${eachTodo.Title} </td> <td> ${
-        eachTodo.Description
+    .map(todo => {
+      return `<tr> <td> ${todo.Title} </td> <td> ${
+        todo.Description
       }</td> </tr>`;
     })
     .join("");
@@ -45,7 +33,6 @@ const renderHomepage = function(content, req, res) {
 };
 
 const renderIndex = function(content, req, res) {
-
   sendData(req, res, content);
 };
 

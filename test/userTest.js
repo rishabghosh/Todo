@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+
 const chai = require("chai");
 const assert = chai.assert;
 const User = require("../src/user.js");
@@ -38,17 +39,17 @@ describe("Class User", () => {
 
   it("addTodoList method should push given element to todo list", () => {
     const user = new User(name, username, password);
-    user.addTodoList({ Title: "code now", Description: "No excuses" });
+    user.addTodoList({ Title: "code now", Description: "No excuse" });
     const actualOutput = user.todo;
-    const expectedOutput = [{ Title: "code now", Description: "No excuses" }];
+    const expectedOutput = [{ Title: "code now", Description: "No excuse" }];
     assert.deepStrictEqual(actualOutput, expectedOutput);
   });
 
   it("getTodoList method should return current todo list", () => {
     const user = new User(name, username, password);
-    user.addTodoList({ Title: "code now", Description: "No excuses" });
-    const actualOutput = user.todo;
-    const expectedOutput = [{ Title: "code now", Description: "No excuses" }];
+    user.addTodoList({ Title: "code now", Description: "No excuse" });
+    const actualOutput = user.getTodoList();
+    const expectedOutput = [{ Title: "code now", Description: "No excuse" }];
     assert.deepStrictEqual(actualOutput, expectedOutput);
   });
   

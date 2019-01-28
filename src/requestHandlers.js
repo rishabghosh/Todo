@@ -10,6 +10,12 @@ const invalidRequest = function(req, res) {
   res.end();
 };
 
+const redirect = function(res, location) {
+  res.statusCode = 301;
+  res.setHeader("Location", location);
+  res.end();
+};
+
 const getFilePath = function(url) {
   return url === "/" ? "./public/index.html" : "./public" + url;
 };
@@ -26,7 +32,6 @@ const readBody = function(req, res, next) {
 
 const serveFiles = function(fs, req, res) {
   const filePath = getFilePath(req.url);
-
   fs.readFile(filePath, (error, data) => {
     if (!error) {
       sendData(req, res, data);
@@ -41,5 +46,6 @@ module.exports = {
   serveFiles,
   sendData,
   invalidRequest,
+  redirect,
   getFilePath
 };

@@ -1,1 +1,7 @@
-{}
+{
+  "beta": {
+    "password": "beta1234",
+    "name": "first beta",
+    "todo": []
+  }
+}

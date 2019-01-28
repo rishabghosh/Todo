@@ -18,18 +18,17 @@
 
 ***** new features ******
    *  user login - 
-      -  Create a user
-         - Create a class
-         - add some methods
-         .
-      -  user should have username, name, password and todo obj
-      -  should have methods like -
-         getUsername, isValidPassowrd getTodo
       -  user obj should be stored in json
-      -  extract all the usernames to a array
       -  if any username doesnot match show invalid username
       -  otherwise access the username and check if password matches
       -  if password matches then render the homepage and add the todo of that user
       -  
    *  after sign up the page should show -
       -  created user successfully
+
+***** next *****
+   *  extract constants
+   *  rename functions
+   *  extract utils
+   *  remove unnecessary else
+   *     

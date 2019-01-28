@@ -1,7 +1,8 @@
 const fs = require("fs");
 const placeholders = require("./placeholders.js");
-const { sendData } = require("./requestHandlers.js");
+const { sendData, redirect } = require("./requestHandlers.js");
 const PREV_TODO = require("../dataBase/todoList.json");
+const USERS = require("../dataBase/users.json");
 const readArgs = require("./parser.js");
 
 const addNewTodo = function(req) {
@@ -26,17 +27,31 @@ const getTodoTable = function(todoList) {
 };
 
 const renderHomepage = function(content, req, res) {
-  addNewTodo(req);
+  if (req.method === "POST") addNewTodo(req);
   const todoTable = getTodoTable(PREV_TODO);
-  const message = content.replace(placeholders.forTodoList, todoTable);
+  let message = content.replace(placeholders.forTodoList, todoTable);
   sendData(req, res, message);
 };
 
-const renderIndex = function(content, req, res) {
-  sendData(req, res, content);
+const hasCorrectCredentials = function(credentials) {
+  const givenUsername = credentials.username;
+  const givenPassword = credentials.password;
+  return (
+    USERS.hasOwnProperty(givenUsername) &&
+    USERS[givenUsername]["password"] === givenPassword
+  );
+};
+
+const checkLoginCredentials = function(req, res) {
+  const credentials = readArgs(req.body);
+  if (hasCorrectCredentials(credentials)) {
+    redirect(res, "/homepage");
+    return;
+  }
+  redirect(res, "/");
 };
 
 module.exports = {
   renderHomepage,
-  renderIndex
+  checkLoginCredentials
 };

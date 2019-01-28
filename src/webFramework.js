@@ -1,11 +1,10 @@
-const hasOnlyHandler = function (req, route) {
-  return !(route.hasOwnProperty("method") && route.hasOwnProperty("url"));
+const hasOnlyHandler = function(route) {
+  //how about !route["method"] && !route["url"] 
+  return !route.hasOwnProperty("method") && !route.hasOwnProperty("url");
 };
 
-
-//no need of giving req to has only handler, creates confusions
-const isMatching = function (req, route) {
-  if (hasOnlyHandler(req, route)) return true;
+const isMatching = function(req, route) {
+  if (hasOnlyHandler(route)) return true;
   return req.url === route.url && req.method === route.method;
 };
 
@@ -26,19 +25,16 @@ class Framework {
     this.routes.push({ method: "POST", url, handler });
   }
 
-  error(handler) {
-    this.errorHandler = { handler };
-  }
-
   handleRequest(req, res) {
     const matchingRoutes = this.routes.filter(isMatching.bind(null, req));
-    matchingRoutes.push(this.errorHandler);
     const remainingRoutes = [...matchingRoutes];
-    const next = function () {
+
+    const next = function() {
+      if(remainingRoutes.length === 0) return;
       const current = remainingRoutes.shift();
-      if (remainingRoutes.length === 0) return;  //change if condition (current)
       current.handler(req, res, next);
     };
+
     next();
   }
 }

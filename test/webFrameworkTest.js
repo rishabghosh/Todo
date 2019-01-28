@@ -28,20 +28,18 @@ describe("Framework", () => {
     assert.deepStrictEqual(framework.routes, expectedOutput);
   });
 
-  it("error method should assign handler in object to errorHandler", () => {
-    const framework = new Framework();
-    const expectedOutput = { handler: sum };
-    framework.error(sum);
-    assert.deepStrictEqual(framework.errorHandler, expectedOutput);
-  });
-
   it("requestHandler method should invoke functions of matching routes with req and res", () => {
-    const asserter = (req, res) => {
+    const asserter = (req, res, next) => {
       assert.deepStrictEqual({ req, res }, { req: "request", res: "response" });
+      next();
+    };
+    const doNothing = (a, b, next) => {
+      next();
     };
 
     const framework = new Framework();
     framework.use(asserter);
+    framework.use(doNothing);
     framework.handleRequest("request", "response");
   });
 });

@@ -12,9 +12,8 @@
 
 ***** refactors *****
    *  utils functions should be in utils
-   *  use cache to read files before server starts
+   *  hasOnlyHandler
 
 ***** testing *****
-   * requestHandlers readBody and serveFiles
    *  testing webApp
    *  testing renderpages

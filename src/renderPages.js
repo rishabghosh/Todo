@@ -16,8 +16,13 @@ const readArgs = text => {
 
 const addNewTodo = function(req) {
   const currentTodo = readArgs(req.body);
-  PREV_TODO.unshift(currentTodo);
-  fs.writeFile("./dataBase/todoList.json", JSON.stringify(PREV_TODO), err =>
+
+  if (!currentTodo.hasOwnProperty("")) {
+    PREV_TODO.unshift(currentTodo);
+  }
+  
+  const updatedList = JSON.stringify(PREV_TODO, null, 2);
+  fs.writeFile("./dataBase/todoList.json", updatedList, err =>
     console.error(err)
   );
 };

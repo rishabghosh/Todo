@@ -28,3 +28,5 @@
       -  otherwise access the username and check if password matches
       -  if password matches then render the homepage and add the todo of that user
       -  
+   *  after sign up the page should show -
+      -  created user successfully

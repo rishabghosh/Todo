@@ -17,7 +17,7 @@ const readArgs = text => {
 const addNewTodo = function(req) {
   const currentTodo = readArgs(req.body);
 
-  if (!currentTodo.hasOwnProperty("")) {
+  if (currentTodo.hasOwnProperty("Title")) {
     PREV_TODO.unshift(currentTodo);
   }
 
@@ -26,8 +26,6 @@ const addNewTodo = function(req) {
     console.error(err)
   );
 };
-
-
 
 const getTodoTable = function(todoList) {
   return todoList
@@ -39,13 +37,19 @@ const getTodoTable = function(todoList) {
     .join("");
 };
 
-const renderHomepage = function(homepage, req, res) {
+const renderHomepage = function(content, req, res) {
   addNewTodo(req);
   const todoTable = getTodoTable(PREV_TODO);
-  const message = homepage.replace(placeholders.forTodoList, todoTable);
+  const message = content.replace(placeholders.forTodoList, todoTable);
   sendData(req, res, message);
 };
 
+const renderIndex = function(content, req, res) {
+
+  sendData(req, res, content);
+};
+
 module.exports = {
-  renderHomepage
+  renderHomepage,
+  renderIndex
 };

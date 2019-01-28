@@ -3,14 +3,58 @@
 
 <head>
 	<title>Todo-Login</title>
-	<link rel="stylesheet" type="text/css" href="main.css" />
-	<script src="main.js"></script>
+	<link rel="stylesheet" type="text/css" href="style/loginpage.css" />
 </head>
 
 <body>
-	<h1>should modified to a login page</h1>
+
 	<form method="POST" action="/homepage.html">
-		<input type="submit" value="Login">
+		<p>
+			<span>Already a user?</span>
+			<h3>Sign-in</h3>
+		</p>
+
+		<p>
+			<label>Username :</label>
+			<input type="text" name="username">
+		</p>
+
+		<p>
+			<label>Password :</label>
+			<input type="password" name="password">
+		</p>
+
+		<p>
+			<input type="submit" value="Login">
+		</p>
+
+	</form>
+
+	<form method="POST" action="/">
+		<p>
+			<span>Don't have an account?</span>
+			<h3>Sign-up</h3>
+		</p>
+
+		<p>
+			<label>Name :</label>
+			<input name="name">
+		</p>
+
+		<p>
+			<label>Username :</label>
+			<input type="text" name="username">
+		</p>
+
+		<p>
+			<label>Password :</label>
+			<input type="password" name="password">
+		</p>
+
+		<p>
+			<input type="submit" value="Sign Up">
+		</p>
+
 	</form>
 </body>
 

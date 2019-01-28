@@ -20,12 +20,14 @@ const addNewTodo = function(req) {
   if (!currentTodo.hasOwnProperty("")) {
     PREV_TODO.unshift(currentTodo);
   }
-  
+
   const updatedList = JSON.stringify(PREV_TODO, null, 2);
   fs.writeFile("./dataBase/todoList.json", updatedList, err =>
     console.error(err)
   );
 };
+
+
 
 const getTodoTable = function(todoList) {
   return todoList

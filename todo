@@ -1,15 +1,6 @@
 ====== parking log =======
    * create a login page in index.html
 
-***** webApp *****
-   *  refactoring
-   *  static files should be cached before server starts
-   *  
-
-***** ui *****
-   * text area , required to avoid empty things
-
-
 ***** refactors *****
    *  utils functions should be in utils
    *  hasOnlyHandler
@@ -17,3 +8,23 @@
 ***** testing *****
    *  testing webApp
    *  testing renderpages
+
+***** add  users json *****
+   * json shold be object 
+   * have a username
+   * each username have value is object 
+   * that have password and other things
+   * add new users like 
+
+***** new features ******
+   *  user login - 
+      -  add new class user
+      -  user should have username, name, password and todo obj
+      -  should have methods like -
+         getUsername, isValidPassowrd getTodo
+      -  user obj should be stored in json
+      -  extract all the usernames to a array
+      -  if any username doesnot match show invalid username
+      -  otherwise access the username and check if password matches
+      -  if password matches then render the homepage and add the todo of that user
+      -  

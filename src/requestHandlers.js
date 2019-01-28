@@ -11,11 +11,7 @@ const sendNotFound = function(req, res) {
 };
 
 const getFilePath = function(url) {
-  let filePath = "./public" + url;
-  if (url === "/") {
-    filePath = "./public/index.html";
-  }
-  return filePath;
+  return url === "/" ? "./public/index.html" : "./public" + url;
 };
 
 const readBody = function(req, res, next) {

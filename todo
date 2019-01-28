@@ -18,7 +18,10 @@
 
 ***** new features ******
    *  user login - 
-      -  add new class user
+      -  Create a user
+         - Create a class
+         - add some methods
+         .
       -  user should have username, name, password and todo obj
       -  should have methods like -
          getUsername, isValidPassowrd getTodo

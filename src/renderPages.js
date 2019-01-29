@@ -28,9 +28,9 @@ const getTodoTable = function(todoList) {
   let keys = Object.keys(todoList);
   return keys
     .map(todo => {
-      const title = withTags(TD, todo);
-      const heading = title;
-      return withTags(TR, heading);
+      todo = `<a href="www.google.com">${todo}</a>`;
+      let title = withTags(TD, todo);
+      return withTags(TR, title);
     })
     .join(EMPTY_STRING);
 };
@@ -41,6 +41,10 @@ const renderHomepage = function(content, req, res) {
   const todoTable = getTodoTable(todoList);
   let message = content.replace(placeholders.forTodoList, todoTable);
   sendData(req, res, message);
+};
+
+const logOut = function(req, res) {
+  redirect(res, ROOT);
 };
 
 const hasCorrectCredentials = function(credentials) {
@@ -57,7 +61,11 @@ const storeSignUpCredentials = function(req, res) {
   const writer = fs.writeFile;
   USERS[credentials.username] = credentials;
   writeJsonData("./dataBase/users.json", USERS, writer);
-  writeJsonData(`./user_todos/${credentials.username}.json`, {}, writer);
+  writeJsonData(
+    `./dataBase/user_todos/${credentials.username}.json`,
+    [],
+    writer
+  );
   redirect(res, ROOT);
 };
 
@@ -76,5 +84,6 @@ const checkLoginCredentials = function(req, res) {
 module.exports = {
   renderHomepage,
   checkLoginCredentials,
-  storeSignUpCredentials
+  storeSignUpCredentials,
+  logOut
 };

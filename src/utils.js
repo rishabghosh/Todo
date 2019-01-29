@@ -16,8 +16,11 @@ const withTags = function(tag, content) {
   return `<${tag}> ${content} </${tag}>`;
 };
 
+const filterDescription = description => description.split("+").join(" ");
+
 module.exports = {
   getFilePath,
   writeJsonData,
   withTags,
+  filterDescription
 };

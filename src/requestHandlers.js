@@ -1,4 +1,4 @@
-const { getFilePath } = require("./utils.js");
+const { getFilePath, filterDescription } = require("./utils.js");
 const { ERROR_MESSAGE } = require("./constants.js");
 
 const sendData = function(req, res, data) {
@@ -24,7 +24,7 @@ const readBody = function(req, res, next) {
   res.statusCode = 200;
   req.on("data", chunk => (content += chunk));
   req.on("end", () => {
-    req.body = content;
+    req.body = filterDescription(content);
     next();
   });
 };

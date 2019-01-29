@@ -12,7 +12,6 @@ const {
   serveFiles
 } = require("../src/requestHandlers.js");
 
-
 describe("sendData", () => {
   const req = null;
 
@@ -35,7 +34,7 @@ describe("sendData", () => {
 
 describe("invalidRequest", () => {
   const req = null;
-  
+
   it("should modify the response body if sendNotFound is invoked", () => {
     const res = new Response();
     invalidRequest(req, res);
@@ -44,7 +43,6 @@ describe("invalidRequest", () => {
     assert.strictEqual(actualOutput, expectedOutput);
   });
 });
-
 
 describe("readBody", () => {
   it("should read chunks form server and call the next functions", () => {
@@ -64,8 +62,8 @@ describe("readBody", () => {
 
 describe("serveFiles", () => {
   const fs = new FileSystem();
-  (fs.fileContents["./public/index.html"] = "0\n1\n2\n3\n4"),
-  (fs.fileContents["./public/homepage.html"] = "abcd");
+  fs.fileContents["./public/index.html"] = "0\n1\n2\n3\n4";
+  fs.fileContents["./public/homepage.html"] = "abcd";
 
   it("should serve a file if exists", () => {
     const res = new Response();

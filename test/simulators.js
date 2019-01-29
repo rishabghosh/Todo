@@ -31,11 +31,11 @@ class FileSystem {
     this.fileContents = {};
   }
 
-  readdirSync(path) {
+  readdirSync() {
     return this.filenames;
   }
 
-  readFileSync(filePath, encodeing){
+  readFileSync(filePath) {
     return this.fileContents[filePath];
   }
 

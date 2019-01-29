@@ -3,5 +3,10 @@
     "password": "beta1234",
     "name": "first beta",
     "todo": []
+  },
+  "delta": {
+    "password": "delta1234",
+    "name": "first delta",
+    "todo": []
   }
 }

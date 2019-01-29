@@ -3,6 +3,7 @@ const placeholders = require("./placeholders.js");
 const { sendData, redirect } = require("./requestHandlers.js");
 const PREV_TODO = require("../dataBase/todoList.json");
 const USERS = require("../dataBase/users.json");
+const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
 const { writeJsonData, withTags } = require("./utils.js");
 const {
@@ -51,8 +52,12 @@ const hasCorrectCredentials = function(credentials) {
 };
 
 const checkLoginCredentials = function(req, res) {
+  const writer = fs.writeFile;
   const credentials = readArgs(req.body);
+
   if (hasCorrectCredentials(credentials)) {
+    CURRENT_USER.username = credentials.username;
+    writeJsonData("./dataBase/username.json", CURRENT_USER, writer);
     redirect(res, "/homepage");
     return;
   }

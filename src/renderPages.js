@@ -1,26 +1,24 @@
 const fs = require("fs");
 const placeholders = require("./placeholders.js");
 const { sendData, redirect } = require("./requestHandlers.js");
-const PREV_TODO = require("../dataBase/todoList.json");
 const USERS = require("../dataBase/users.json");
 const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
 const { writeJsonData, withTags } = require("./utils.js");
-const {
-  EMPTY_STRING,
-  TODO_JSON_PATH,
-  ROOT,
-  POST,
-  TD,
-  TR
-} = require("./constants.js");
+const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");
 
-const addNewTodo = function(req) {
+const getPreviousTodos = function() {
+  const username = CURRENT_USER.username;
+  const previousTodos = USERS[username]["todo"];
+  return previousTodos;
+};
+
+const addNewTodo = function(req, todoList) {
   const writer = fs.writeFile;
   const currentArg = readArgs(req.body);
   if (currentArg.hasOwnProperty("Title")) {
-    PREV_TODO.unshift(currentArg);
-    writeJsonData(TODO_JSON_PATH, PREV_TODO, writer);
+    todoList.unshift(currentArg);
+    writeJsonData("./dataBase/users.json", USERS, writer);
   }
 };
 
@@ -36,8 +34,9 @@ const getTodoTable = function(todoList) {
 };
 
 const renderHomepage = function(content, req, res) {
-  if (req.method === POST) addNewTodo(req);
-  const todoTable = getTodoTable(PREV_TODO);
+  const todoList = getPreviousTodos();
+  if (req.method === POST) addNewTodo(req, todoList);
+  const todoTable = getTodoTable(todoList);
   let message = content.replace(placeholders.forTodoList, todoTable);
   sendData(req, res, message);
 };

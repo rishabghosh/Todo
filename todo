@@ -1,36 +1,6 @@
-====== parking log =======
-   * create a login page in index.html
- 
- 
-***** refactors *****
-   *  utils functions should be in utils
-   *  hasOnlyHandler
+**** fail safe ? while caching ***
 
-***** testing *****
-   *  testing webApp
-   *  testing renderpages
-
-***** add  users json *****
-   * json shold be object 
-   * have a username
-   * each username have value is object 
-   * that have password and other things
-   * add new users like 
-
-***** new features ******
-   *  user login - 
-      -  user obj should be stored in json
-      -  if any username doesnot match show invalid username
-      -  otherwise access the username and check if password matches
-      -  if password matches then render the homepage and add the todo of that user
-      -  
-   *  after sign up the page should show -
-      -  created user successfully
-
-***** next *****
-   *  rename functions
-   *  extract utils
-      - getFilePath could be in utils
-      - writeJsonData could be extracted to Utils
-      - with tags could be extract to a function in util
-      - readbody callback for data and end event
+**** refactors ****
+   *  renderPages -     
+      -  dublication username = Current_user.username, writer
+      -   getFilePathForUser could be getUsersDataPath/ getUsersDatalocation

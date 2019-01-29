@@ -1,7 +1,7 @@
 const { ROOT, DEFAULT_PAGE } = require("./constants.js");
 
 const getPublicPath = url => "./public" + url;
-const printError = error => console.error("error***",error);
+const printError = error => console.error("error***", error);
 
 const getFilePath = function(url) {
   return url === ROOT ? DEFAULT_PAGE : getPublicPath(url);
@@ -16,11 +16,16 @@ const withTags = function(tag, content) {
   return `<${tag}> ${content} </${tag}>`;
 };
 
-const filterDescription = description => description.split("+").join(" ");
+const decoder = description => description.split("+").join(" ");
+
+const getFilePathForUser = function(username) {
+  return `./dataBase/user_todos/${username}.json`;
+};
 
 module.exports = {
   getFilePath,
   writeJsonData,
   withTags,
-  filterDescription
+  decoder,
+  getFilePathForUser
 };

@@ -7,6 +7,7 @@ const DEFAULT_PAGE = "./public/index.html";
 const POST = "POST";
 const TD = "td";
 const TR = "tr";
+const EMPTY_OBJECT = {};
 
 module.exports = {
   EMPTY_STRING,
@@ -17,5 +18,6 @@ module.exports = {
   ROOT,
   POST,
   TD,
-  TR
+  TR,
+  EMPTY_OBJECT
 };

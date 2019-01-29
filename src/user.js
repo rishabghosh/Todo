@@ -14,7 +14,7 @@ class User {
   isValidPassword(password) {
     return this.password === password;
   }
-  addTodoList(todo){
+  addTodoList(todo) {
     this.todo.push(todo);
   }
   getTodoList() {

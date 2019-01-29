@@ -1,43 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Todo-home</title>
-    <link rel="stylesheet" type="text/css" href="/style/homepage.css" />
-    <script src="js/homepage.js"></script>
-  </head>
-  <body>
-    <form method="POST" action="/logout">
-      <label
-        >Profile:
-        <!--user-->
-      </label>
-      <input type="submit" value="Logout" />
-    </form>
-    <div class="container">
-      <div class="todo_list">
-        <h2>Todos</h2>
 
-        <table id="todo_table">
-          <tr>
-            <td>TODO-LISTS</td>
-          </tr>
-          <!--todo_lists-->
-        </table>
-      </div>
-      <form method="POST" action="" class="todo_form">
-        <p><label>ADD NEW TODO LISTS</label></p>
-        <p>
-          <textarea
-            name="Title"
-            id="title"
-            rows="2"
-            cols="100"
-            required
-          ></textarea>
-        </p>
+<head>
+  <title>Todo-home</title>
+  <link rel="stylesheet" type="text/css" href="/style/homepage.css" />
+</head>
 
-        <p><input type="submit" value="Submit" /></p>
-      </form>
+<body>
+
+  <form method="POST" action="/logout">
+    <label>Profile:</label>
+    <input type="submit" value="Logout" />
+  </form>
+
+  <div class="container">
+
+    <div class="todo_list">
+      <table id="todo_table">
+        <tr>
+          <td>TODO-LISTS</td>
+        </tr>
+        <!--todo_lists-->
+      </table>
     </div>
-  </body>
+
+    <form method="POST" action="" class="todo_form">
+      <h2>ADD NEW TODO LISTS</h2>
+      <p> <textarea name="Title" id="title" rows="2" cols="100" required></textarea> </p>
+      <p> <input type="submit" value="Submit" /> </p>
+    </form>
+    
+  </div>
+</body>
+
 </html>

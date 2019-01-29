@@ -52,5 +52,4 @@ describe("Class User", () => {
     const expectedOutput = [{ Title: "code now", Description: "No excuse" }];
     assert.deepStrictEqual(actualOutput, expectedOutput);
   });
-  
 });

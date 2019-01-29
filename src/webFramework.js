@@ -1,5 +1,5 @@
 const hasOnlyHandler = function(route) {
-  //how about !route["method"] && !route["url"] 
+  //how about !route["method"] && !route["url"]
   return !route.hasOwnProperty("method") && !route.hasOwnProperty("url");
 };
 
@@ -30,7 +30,7 @@ class Framework {
     const remainingRoutes = [...matchingRoutes];
 
     const next = function() {
-      if(remainingRoutes.length === 0) return;
+      if (remainingRoutes.length === 0) return;
       const current = remainingRoutes.shift();
       current.handler(req, res, next);
     };

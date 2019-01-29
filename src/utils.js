@@ -1,7 +1,7 @@
 const { ROOT, DEFAULT_PAGE } = require("./constants.js");
 
 const getPublicPath = url => "./public" + url;
-const printError = error => console.error(error);
+const printError = error => console.error("error***",error);
 
 const getFilePath = function(url) {
   return url === ROOT ? DEFAULT_PAGE : getPublicPath(url);

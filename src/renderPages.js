@@ -57,7 +57,11 @@ const storeSignUpCredentials = function(req, res) {
   const writer = fs.writeFile;
   USERS[credentials.username] = credentials;
   writeJsonData("./dataBase/users.json", USERS, writer);
-  writeJsonData(`./user_todos/${credentials.username}.json`, {}, writer);
+  writeJsonData(
+    `./dataBase/user_todos/${credentials.username}.json`,
+    {},
+    writer
+  );
   redirect(res, ROOT);
 };
 

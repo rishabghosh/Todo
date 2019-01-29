@@ -1,6 +1,7 @@
 ====== parking log =======
    * create a login page in index.html
-
+ 
+ 
 ***** refactors *****
    *  utils functions should be in utils
    *  hasOnlyHandler

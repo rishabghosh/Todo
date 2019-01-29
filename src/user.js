@@ -5,7 +5,6 @@ class User {
     this.password = password;
     this.todo = [];
   }
-
   getName() {
     return this.name;
   }

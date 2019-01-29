@@ -51,10 +51,19 @@ const hasCorrectCredentials = function(credentials) {
   );
 };
 
+const storeSignUpCredentials = function(req, res) {
+  const credentials = readArgs(req.body);
+  const writer = fs.writeFile;
+  USERS[credentials.username] = credentials;
+  writeJsonData("./dataBase/users.json", USERS, writer);
+  writeJsonData(`./user_todos/${credentials.username}.json`, "{}", writer);
+  redirect(res, ROOT);
+  console.log(credentials.username);
+};
+
 const checkLoginCredentials = function(req, res) {
   const writer = fs.writeFile;
   const credentials = readArgs(req.body);
-
   if (hasCorrectCredentials(credentials)) {
     CURRENT_USER.username = credentials.username;
     writeJsonData("./dataBase/username.json", CURRENT_USER, writer);
@@ -66,5 +75,6 @@ const checkLoginCredentials = function(req, res) {
 
 module.exports = {
   renderHomepage,
-  checkLoginCredentials
+  checkLoginCredentials,
+  storeSignUpCredentials
 };

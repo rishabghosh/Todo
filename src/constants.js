@@ -8,6 +8,8 @@ const POST = "POST";
 const TD = "td";
 const TR = "tr";
 const EMPTY_OBJECT = {};
+const USERNAME_JSON_PATH = "./dataBase/username.json";
+const USERS_JSON_PATH = "./dataBase/users.json";
 
 module.exports = {
   EMPTY_STRING,
@@ -19,5 +21,7 @@ module.exports = {
   POST,
   TD,
   TR,
-  EMPTY_OBJECT
+  EMPTY_OBJECT,
+  USERNAME_JSON_PATH,
+  USERS_JSON_PATH
 };

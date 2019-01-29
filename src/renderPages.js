@@ -1,34 +1,31 @@
 const fs = require("fs");
 const placeholders = require("./placeholders.js");
-const {
-  sendData,
-  redirect
-} = require("./requestHandlers.js");
+const { sendData, redirect } = require("./requestHandlers.js");
 const USERS = require("../dataBase/users.json");
 const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
-const {
-  writeJsonData,
-  withTags,
-  getFilePathForUser
-} = require("./utils.js");
+const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
 const {
   EMPTY_STRING,
+  EMPTY_OBJECT,
   ROOT,
   POST,
   TD,
   TR,
-  EMPTY_OBJECT
+  USERNAME_JSON_PATH,
+  USERS_JSON_PATH
 } = require("./constants.js");
 
-const getPreviousTodos = function () {
+const WRITER = fs.writeFile;
+
+const getPreviousTodos = function() {
   const username = CURRENT_USER.username;
   const path = getFilePathForUser(username);
   const previousTodos = fs.readFileSync(path, "utf8");
   return JSON.parse(previousTodos);
 };
 
-const addNewTodo = function (req, todoList) {
+const addNewTodo = function(req, todoList) {
   const username = CURRENT_USER.username;
   const writer = fs.writeFile;
   const currentArg = readArgs(req.body);
@@ -37,7 +34,7 @@ const addNewTodo = function (req, todoList) {
   writeJsonData(path, todoList, writer);
 };
 
-const getTodoTable = function (todoList) {
+const getTodoTable = function(todoList) {
   let keys = Object.keys(todoList);
   return keys
     .map(todo => {
@@ -48,7 +45,7 @@ const getTodoTable = function (todoList) {
     .join(EMPTY_STRING);
 };
 
-const renderHomepage = function (content, req, res) {
+const renderHomepage = function(content, req, res) {
   const todoList = getPreviousTodos();
   if (req.method === POST) addNewTodo(req, todoList);
   const todoTable = getTodoTable(todoList);
@@ -56,14 +53,13 @@ const renderHomepage = function (content, req, res) {
   sendData(req, res, message);
 };
 
-const logOut = function (req, res) {
-  const writer = fs.writeFile;
-  CURRENT_USER.username = "";
-  writeJsonData("./dataBase/username.json", CURRENT_USER, writer);
+const logOut = function(req, res) {
+  CURRENT_USER.username = EMPTY_STRING;
+  writeJsonData(USERNAME_JSON_PATH, CURRENT_USER, WRITER);
   redirect(res, ROOT);
 };
 
-const hasCorrectCredentials = function (credentials) {
+const hasCorrectCredentials = function(credentials) {
   const givenUsername = credentials.username;
   const givenPassword = credentials.password;
   return (
@@ -72,22 +68,19 @@ const hasCorrectCredentials = function (credentials) {
   );
 };
 
-const storeSignUpCredentials = function (req, res) {
+const storeSignUpCredentials = function(req, res) {
   const credentials = readArgs(req.body);
-  const writer = fs.writeFile;
   const path = getFilePathForUser(credentials.username);
   USERS[credentials.username] = credentials;
-  writeJsonData("./dataBase/users.json", USERS, writer);
-  writeJsonData(path, EMPTY_OBJECT, writer);
-  redirect(res, ROOT);
-};
+  writeJsonData(USERS_JSON_PATH, USERS, WRITER);
+  writeJsonData(path, EMPTY_OBJECT, WRITER);
+  redirect(res, ROOT); };
 
-const checkLoginCredentials = function (req, res) {
-  const writer = fs.writeFile;
+const checkLoginCredentials = function(req, res) {
   const credentials = readArgs(req.body);
   if (hasCorrectCredentials(credentials)) {
-    CURRENT_USER["username"] = credentials.username;
-    writeJsonData("./dataBase/username.json", CURRENT_USER, writer);
+    CURRENT_USER.username = credentials.username;
+    writeJsonData(USERNAME_JSON_PATH, CURRENT_USER, WRITER);
     redirect(res, "/homepage");
     return;
   }

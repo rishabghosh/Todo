@@ -8,14 +8,14 @@ const { Request, Response, FileSystem } = require("./simulators.js");
 const {
   sendData,
   invalidRequest,
-  getFilePath,
   readBody,
   serveFiles
 } = require("../src/requestHandlers.js");
 
-const req = null;
 
 describe("sendData", () => {
+  const req = null;
+
   it("should not modify the response body if sendData is not invoked", () => {
     const res = new Response();
     const actualOutput = res.body;
@@ -34,6 +34,8 @@ describe("sendData", () => {
 });
 
 describe("invalidRequest", () => {
+  const req = null;
+  
   it("should modify the response body if sendNotFound is invoked", () => {
     const res = new Response();
     invalidRequest(req, res);
@@ -43,21 +45,6 @@ describe("invalidRequest", () => {
   });
 });
 
-describe("getFilePath", () => {
-  it("should get a equivalent file path of public directory for a given url", () => {
-    const url = "/home";
-    const actualOutput = getFilePath(url);
-    const expectedOutput = "./public/home";
-    assert.strictEqual(actualOutput, expectedOutput);
-  });
-
-  it("should return file path of index.html of public directory if given url is root", () => {
-    const url = "/";
-    const actualOutput = getFilePath(url);
-    const expectedOutput = "./public/index.html";
-    assert.strictEqual(actualOutput, expectedOutput);
-  });
-});
 
 describe("readBody", () => {
   it("should read chunks form server and call the next functions", () => {

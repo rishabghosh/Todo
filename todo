@@ -29,4 +29,7 @@
 ***** next *****
    *  rename functions
    *  extract utils
-   *  remove unnecessary else
+      - getFilePath could be in utils
+      - writeJsonData could be extracted to Utils
+      - with tags could be extract to a function in util
+      - readbody callback for data and end event

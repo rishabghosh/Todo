@@ -4,27 +4,32 @@ const { sendData, redirect } = require("./requestHandlers.js");
 const PREV_TODO = require("../dataBase/todoList.json");
 const USERS = require("../dataBase/users.json");
 const readArgs = require("./parser.js");
-const { EMPTY_STRING, ROOT, POST } = require("./constants.js");
-
-
+const { writeJsonData, withTags } = require("./utils.js");
+const {
+  EMPTY_STRING,
+  TODO_JSON_PATH,
+  ROOT,
+  POST,
+  TD,
+  TR
+} = require("./constants.js");
 
 const addNewTodo = function(req) {
+  const writer = fs.writeFile;
   const currentArg = readArgs(req.body);
   if (currentArg.hasOwnProperty("Title")) {
     PREV_TODO.unshift(currentArg);
-    const updatedList = JSON.stringify(PREV_TODO, null, 2);
-    fs.writeFile("./dataBase/todoList.json", updatedList, err =>
-      console.error(err)
-    );
+    writeJsonData(TODO_JSON_PATH, PREV_TODO, writer);
   }
 };
 
 const getTodoTable = function(todoList) {
   return todoList
     .map(todo => {
-      return `<tr> <td> ${todo.Title} </td> <td> ${
-        todo.Description
-      }</td> </tr>`;
+      const title = withTags(TD, todo.Title);
+      const description = withTags(TD, todo.Description);
+      const heading = title + description;
+      return withTags(TR, heading);
     })
     .join(EMPTY_STRING);
 };

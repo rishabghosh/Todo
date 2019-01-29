@@ -1,4 +1,5 @@
-const { ERROR_MESSAGE, ROOT, DEFAULT_PAGE } = require("./constants.js");
+const { getFilePath } = require("./utils.js");
+const { ERROR_MESSAGE } = require("./constants.js");
 
 const sendData = function(req, res, data) {
   res.statusCode = 200;
@@ -16,10 +17,6 @@ const redirect = function(res, location) {
   res.statusCode = 301;
   res.setHeader("Location", location);
   res.end();
-};
-
-const getFilePath = function(url) {
-  return url === ROOT ? DEFAULT_PAGE : "./public" + url;
 };
 
 const readBody = function(req, res, next) {

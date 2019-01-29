@@ -1,7 +1,15 @@
 const fs = require("fs");
 const { Framework } = require("./webFramework.js");
-const { renderHomepage, checkLoginCredentials,storeSignUpCredentials } = require("./renderPages.js");
+
+const {
+  renderHomepage,
+  checkLoginCredentials,
+  storeSignUpCredentials,
+  logOut
+} = require("./renderPages.js");
+
 const { readBody, serveFiles } = require("./requestHandlers.js");
+
 const { createCache } = require("./cache.js");
 const { HOMEPAGE_PATH } = require("./constants.js");
 
@@ -13,6 +21,7 @@ const app = function(req, res) {
   framework.use(readBody);
   framework.post("/login", checkLoginCredentials);
   framework.post("/signup", storeSignUpCredentials);
+  framework.post("/logout", logOut);
   framework.get("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
   framework.post("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
   framework.use(serveFiles.bind(null, fs));

@@ -19,7 +19,7 @@ const withTags = function(tag, content) {
 const decoder = description => description.split("+").join(" ");
 
 const getFilePathForUser = function(username) {
-  return `./dataBase/user_todos/${username}.json`;
+  return `./dataBase/userTodos/${username}.json`;
 };
 
 module.exports = {

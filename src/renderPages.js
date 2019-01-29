@@ -1,10 +1,17 @@
 const fs = require("fs");
 const placeholders = require("./placeholders.js");
-const { sendData, redirect } = require("./requestHandlers.js");
+const {
+  sendData,
+  redirect
+} = require("./requestHandlers.js");
 const USERS = require("../dataBase/users.json");
 const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
-const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
+const {
+  writeJsonData,
+  withTags,
+  getFilePathForUser
+} = require("./utils.js");
 const {
   EMPTY_STRING,
   ROOT,
@@ -14,14 +21,14 @@ const {
   EMPTY_OBJECT
 } = require("./constants.js");
 
-const getPreviousTodos = function() {
+const getPreviousTodos = function () {
   const username = CURRENT_USER.username;
   const path = getFilePathForUser(username);
   const previousTodos = fs.readFileSync(path, "utf8");
   return JSON.parse(previousTodos);
 };
 
-const addNewTodo = function(req, todoList) {
+const addNewTodo = function (req, todoList) {
   const username = CURRENT_USER.username;
   const writer = fs.writeFile;
   const currentArg = readArgs(req.body);
@@ -30,7 +37,7 @@ const addNewTodo = function(req, todoList) {
   writeJsonData(path, todoList, writer);
 };
 
-const getTodoTable = function(todoList) {
+const getTodoTable = function (todoList) {
   let keys = Object.keys(todoList);
   return keys
     .map(todo => {
@@ -41,7 +48,7 @@ const getTodoTable = function(todoList) {
     .join(EMPTY_STRING);
 };
 
-const renderHomepage = function(content, req, res) {
+const renderHomepage = function (content, req, res) {
   const todoList = getPreviousTodos();
   if (req.method === POST) addNewTodo(req, todoList);
   const todoTable = getTodoTable(todoList);
@@ -49,11 +56,14 @@ const renderHomepage = function(content, req, res) {
   sendData(req, res, message);
 };
 
-const logOut = function(req, res) {
+const logOut = function (req, res) {
+  const writer = fs.writeFile;
+  CURRENT_USER.username = "";
+  writeJsonData("./dataBase/username.json", CURRENT_USER, writer);
   redirect(res, ROOT);
 };
 
-const hasCorrectCredentials = function(credentials) {
+const hasCorrectCredentials = function (credentials) {
   const givenUsername = credentials.username;
   const givenPassword = credentials.password;
   return (
@@ -62,7 +72,7 @@ const hasCorrectCredentials = function(credentials) {
   );
 };
 
-const storeSignUpCredentials = function(req, res) {
+const storeSignUpCredentials = function (req, res) {
   const credentials = readArgs(req.body);
   const writer = fs.writeFile;
   const path = getFilePathForUser(credentials.username);
@@ -72,7 +82,7 @@ const storeSignUpCredentials = function(req, res) {
   redirect(res, ROOT);
 };
 
-const checkLoginCredentials = function(req, res) {
+const checkLoginCredentials = function (req, res) {
   const writer = fs.writeFile;
   const credentials = readArgs(req.body);
   if (hasCorrectCredentials(credentials)) {

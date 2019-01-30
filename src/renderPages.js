@@ -6,6 +6,7 @@ const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
 const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
 const TodoList = require("./todoList.js");
+const Todo = require("./todo.js");
 
 const {
   EMPTY_STRING,
@@ -34,11 +35,13 @@ const getPreviousTodos = function() {
 
 const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
-  const todoList = new TodoList(currentArg.Title);
-  const currentId = getCurrentId(previousTodoList);
-  previousTodoList[currentId] = todoList;
-  const path = getFilePathForUser(CURRENT_USER.username);
-  writeJsonData(path, previousTodoList, WRITER);
+  if (currentArg.hasOwnProperty("Title")) {
+    const todoList = new TodoList(currentArg.Title);
+    const currentId = getCurrentId(previousTodoList);
+    previousTodoList[currentId] = todoList;
+    const path = getFilePathForUser(CURRENT_USER.username);
+    writeJsonData(path, previousTodoList, WRITER);
+  }
 };
 
 const getTodoTable = function(previousTodoList) {
@@ -97,17 +100,40 @@ const checkLoginCredentials = function(req, res) {
   redirect(res, ROOT);
 };
 
+const getItemTable = function(currentTodoList) {
+  const items = currentTodoList["item"];
+  return items
+    .map(item => {
+      const title = withTags(TD, item);
+      return withTags(TR, title);
+    })
+    .join(EMPTY_STRING);
+};
+
 const renderTodoItemsPage = function(content, req, res, next) {
   if (req.url.startsWith("/list_")) {
     const previousTodoList = getPreviousTodos();
     const id = req.url.slice(1);
-
-    const todoListTitle = previousTodoList[id]["title"];
-    const message = content.replace("<!--todo_list_tilte-->", todoListTitle);
+    const currentTodoList = previousTodoList[id];
+    if (req.method === POST) addNewItem(req, previousTodoList, currentTodoList);
+    const todoListTitle = currentTodoList["title"];
+    let message = content.replace("<!--todo_list_tilte-->", todoListTitle);
+    message = message.replace(
+      "<!--todo_items-->",
+      getItemTable(currentTodoList)
+    );
     sendData(req, res, message);
     return;
   }
   next();
+};
+
+const addNewItem = function(req, previousTodoList, currentTodoList) {
+  const currentArg = readArgs(req.body);
+  const todo = new Todo(currentTodoList);
+  todo.addItems(currentArg.Title);
+  const path = getFilePathForUser(CURRENT_USER.username);
+  writeJsonData(path, previousTodoList, WRITER);
 };
 
 module.exports = {

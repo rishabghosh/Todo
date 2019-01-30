@@ -45,7 +45,9 @@ const getTodoTable = function(previousTodoList) {
   const ids = Object.keys(previousTodoList).reverse();
   return ids
     .map(id => {
-      const listWithLink = `<a href="/${id}">${previousTodoList[id]["title"]}</a>`;
+      const listWithLink = `<a href="/${id}">${
+        previousTodoList[id]["title"]
+      }</a>`;
       const title = withTags(TD, listWithLink);
       return withTags(TR, title);
     })
@@ -95,9 +97,23 @@ const checkLoginCredentials = function(req, res) {
   redirect(res, ROOT);
 };
 
+const renderTodoItemsPage = function(content, req, res, next) {
+  if (req.url.startsWith("/list_")) {
+    const previousTodoList = getPreviousTodos();
+    const id = req.url.slice(1);
+
+    const todoListTitle = previousTodoList[id]["title"];
+    const message = content.replace("<!--todo_list_tilte-->", todoListTitle);
+    sendData(req, res, message);
+    return;
+  }
+  next();
+};
+
 module.exports = {
   renderHomepage,
   checkLoginCredentials,
   storeSignUpCredentials,
-  logOut
+  logOut,
+  renderTodoItemsPage
 };

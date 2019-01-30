@@ -38,12 +38,9 @@ const getPreviousTodos = function(req) {
 
 const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
-  // console.log("currentArgs*******", currentArg);
   if (currentArg.hasOwnProperty("title")) {
     const todoList = new TodoList(currentArg.title);
-    console.log("todoList****** ", todoList);
     const currentId = getCurrentId(previousTodoList);
-    console.log("currentId ********", currentId);
     previousTodoList[currentId] = todoList;
 
     const path = getFilePathForUser(getUserName(req));
@@ -55,23 +52,27 @@ const getTodoTable = function(previousTodoList) {
   const ids = Object.keys(previousTodoList).reverse();
   return ids
     .map(id => {
-      const listWithLink = `<a href="/${id}">${
-        previousTodoList[id]["title"]
-      }</a>`;
+      const currentList = previousTodoList[id];
+      const listWithLink = `<a href="/${id}">${currentList.title}</a>`;
       const title = withTags(TD, listWithLink);
       return withTags(TR, title);
     })
     .join(EMPTY_STRING);
 };
 
+const getNameOfUser = function(Users, username) {
+  const selectedUser = Users[username];
+  return selectedUser.name;
+};
+
 const renderHomepage = function(content, req, res) {
   const previousTodoList = getPreviousTodos(req);
   if (req.method === POST) addNewTodo(req, previousTodoList);
   const todoTable = getTodoTable(previousTodoList);
-  let message = content.replace(placeholders.forTodoList, todoTable);
+  let message = content.replace(placeholders.forTodoLists, todoTable);
   const username = getUserName(req);
-  const nameOfUser = USERS[username]["name"];
-  message = message.replace("<!--user-->", nameOfUser);
+  const nameOfUser = getNameOfUser(USERS, username);
+  message = message.replace(placeholders.forNameOfUser, nameOfUser);
   sendData(req, res, message);
 };
 
@@ -83,9 +84,10 @@ const logOut = function(req, res) {
 const hasCorrectCredentials = function(credentials) {
   const givenUsername = credentials.username;
   const givenPassword = credentials.password;
+  const UsersCredentials = USERS[givenUsername];
   return (
     USERS.hasOwnProperty(givenUsername) &&
-    USERS[givenUsername]["password"] === givenPassword
+    UsersCredentials.password === givenPassword
   );
 };
 
@@ -126,9 +128,9 @@ const renderTodoItemsPage = function(content, req, res, next) {
     const currentTodoList = previousTodoList[id];
     if (req.method === POST) addNewItem(req, previousTodoList, currentTodoList);
     const todoListTitle = currentTodoList["title"];
-    let message = content.replace("<!--todo_list_tilte-->", todoListTitle);
+    let message = content.replace(placeholders.forTodoListTitle, todoListTitle);
     message = message.replace(
-      "<!--todo_items-->",
+      placeholders.forTodoItems,
       getItemTable(currentTodoList)
     );
     sendData(req, res, message);

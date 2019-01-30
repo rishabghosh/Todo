@@ -19,6 +19,12 @@ const {
 
 const WRITER = fs.writeFile;
 
+const getCurrentId = function(previousTodoList) {
+  const keyCount = Object.keys(previousTodoList).length;
+  const idNumber = keyCount + 1;
+  return "list_" + idNumber;
+};
+
 const getPreviousTodos = function() {
   const path = getFilePathForUser(CURRENT_USER.username);
   const previousTodos = fs.readFileSync(path, "utf8");
@@ -29,7 +35,8 @@ const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
   const path = getFilePathForUser(CURRENT_USER.username);
   const todoList = new TodoList(currentArg.Title);
-  previousTodoList[new Date().getTime()] = todoList;
+  const currentId = getCurrentId(previousTodoList);
+  previousTodoList[currentId] = todoList;
   writeJsonData(path, previousTodoList, WRITER);
 };
 

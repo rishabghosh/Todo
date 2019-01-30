@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Todo-Items</title>
+	<link rel="stylesheet" type="text/css" href="style/todo_items.css" />
+</head>
+
+<body>
+	<div style="display: flex; padding: 20px">
+		<form method="POST" action="/logout">
+			<input type="submit" value="Logout" />
+		</form>
+
+		<form method="POST" action="/homepage">
+			<input type="submit" value="homepage" />
+		</form>
+	</div>
+
+	<div class="container">
+
+		<div class="todo_list">
+			<table id="todo_table">
+				<tr>
+					<td>TODO-ITEMS</td>
+				</tr>
+				<!--todo_items-->
+			</table>
+		</div>
+
+		<form method="POST" action="" class="todo_form">
+			<h2>
+				ADD NEW ITEMS TO: 
+				<!--todo_list_tilte-->
+			</h2>
+			<p> <textarea name="Title" id="title" rows="2" cols="100" required></textarea> </p>
+			<p> <input type="submit" value="Submit" /> </p>
+		</form>
+
+
+
+</body>
+
+</html>

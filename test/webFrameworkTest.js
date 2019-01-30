@@ -33,13 +33,13 @@ describe("Framework", () => {
       assert.deepStrictEqual({ req, res }, { req: "request", res: "response" });
       next();
     };
-    const doNothing = (a, b, next) => {
+    const callNext = (a, b, next) => {
       next();
     };
 
     const framework = new Framework();
     framework.use(asserter);
-    framework.use(doNothing);
+    framework.use(callNext);
     framework.handleRequest("request", "response");
   });
 });
@@ -83,4 +83,5 @@ describe("isMatching", () => {
     const actualOutput = isMatching(null, route);
     assert.strictEqual(actualOutput, expectedOutput);
   });
+
 });

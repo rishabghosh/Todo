@@ -6,6 +6,7 @@ const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
 const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
 const TodoList = require("./todoList.js");
+
 const {
   EMPTY_STRING,
   EMPTY_OBJECT,
@@ -19,6 +20,12 @@ const {
 
 const WRITER = fs.writeFile;
 
+const getCurrentId = function(previousTodoList) {
+  const keyCount = Object.keys(previousTodoList).length;
+  const idNumber = keyCount + 1;
+  return "list_" + idNumber;
+};
+
 const getPreviousTodos = function() {
   const path = getFilePathForUser(CURRENT_USER.username);
   const previousTodos = fs.readFileSync(path, "utf8");
@@ -27,9 +34,10 @@ const getPreviousTodos = function() {
 
 const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
-  const path = getFilePathForUser(CURRENT_USER.username);
   const todoList = new TodoList(currentArg.Title);
-  previousTodoList[new Date().getTime()] = todoList;
+  const currentId = getCurrentId(previousTodoList);
+  previousTodoList[currentId] = todoList;
+  const path = getFilePathForUser(CURRENT_USER.username);
   writeJsonData(path, previousTodoList, WRITER);
 };
 
@@ -37,7 +45,10 @@ const getTodoTable = function(previousTodoList) {
   const ids = Object.keys(previousTodoList).reverse();
   return ids
     .map(id => {
-      const title = withTags(TD, previousTodoList[id]["title"]);
+      const listWithLink = `<a href="/${id}">${
+        previousTodoList[id]["title"]
+      }</a>`;
+      const title = withTags(TD, listWithLink);
       return withTags(TR, title);
     })
     .join(EMPTY_STRING);
@@ -86,9 +97,23 @@ const checkLoginCredentials = function(req, res) {
   redirect(res, ROOT);
 };
 
+const renderTodoItemsPage = function(content, req, res, next) {
+  if (req.url.startsWith("/list_")) {
+    const previousTodoList = getPreviousTodos();
+    const id = req.url.slice(1);
+
+    const todoListTitle = previousTodoList[id]["title"];
+    const message = content.replace("<!--todo_list_tilte-->", todoListTitle);
+    sendData(req, res, message);
+    return;
+  }
+  next();
+};
+
 module.exports = {
   renderHomepage,
   checkLoginCredentials,
   storeSignUpCredentials,
-  logOut
+  logOut,
+  renderTodoItemsPage
 };

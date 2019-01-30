@@ -38,11 +38,13 @@ const getPreviousTodos = function(req) {
 
 const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
-  const todoList = new TodoList(currentArg.Title);
-  const currentId = getCurrentId(previousTodoList);
-  previousTodoList[currentId] = todoList;
-  const path = getFilePathForUser(getUserName(req));
-  writeJsonData(path, previousTodoList, WRITER);
+  if (currentArg.hasOwnProperty("title")) {
+    const todoList = new TodoList(currentArg.Title);
+    const currentId = getCurrentId(previousTodoList);
+    previousTodoList[currentId] = todoList;
+    const path = getFilePathForUser(getUserName(req));
+    writeJsonData(path, previousTodoList, WRITER);
+  }
 };
 
 const getTodoTable = function(previousTodoList) {
@@ -67,7 +69,7 @@ const renderHomepage = function(content, req, res) {
 };
 
 const logOut = function(req, res) {
-  res.setHeader("Set-Cookie", `username=; expires=""`);
+  res.setHeader("Set-Cookie", "username=; expires=\"\"");
   redirect(res, ROOT);
 };
 

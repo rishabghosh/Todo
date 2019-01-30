@@ -1,6 +1,9 @@
 **** fail safe ? while caching ***
 
+***** bug fix ******
+   *  undefined problem in todolist
+   *  carriage problem
+
 **** refactors ****
-   *  renderPages -     
-      -  dublication username = Current_user.username, writer
-      -   getFilePathForUser could be getUsersDataPath/ getUsersDatalocation
+   * dublications
+   * logRequest before readBody

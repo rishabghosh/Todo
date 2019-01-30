@@ -16,7 +16,9 @@ const withTags = function(tag, content) {
   return `<${tag}> ${content} </${tag}>`;
 };
 
-const decoder = description => description.split("+").join(" ");
+const decoder = function(text) {
+  return text.split("+").join(" ");
+};
 
 const getFilePathForUser = function(username) {
   return `./dataBase/userTodos/${username}.json`;

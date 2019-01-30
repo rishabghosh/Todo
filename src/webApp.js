@@ -21,24 +21,28 @@ const TODOITEMS_DATA = CACHE[TODOITEMS];
 
 const useCookies = function(req, res) {
   let cookie = req.headers["cookie"];
-  console.log(cookie);
-  if (cookie != undefined && cookie != 'username=') {
+  if (cookie != undefined && cookie != "username=") {
     renderHomepage(HOMEPAGE_DATA, req, res);
+    // redirect(res, "/homepage");
     return;
   }
   serveFiles(fs, req, res);
 };
 
-const logRequest = function(req, res, next) {
-  console.log(req.url);
-  console.log(req.headers);
+const logRequest = function (req, res, next) {
+  console.log("\n------ LOGS -------\n");
+  console.log("requested method ->", req.method);
+  console.log("requested url -> ", req.url);
+  console.log("headers ->", JSON.stringify(req.headers, null, 2));
+  console.log("body ->", req.body);
+  console.log("\n ------ END ------- \n");
   next();
 };
 
 const app = function(req, res) {
   const framework = new Framework();
-  framework.use(logRequest);
   framework.use(readBody);
+  framework.use(logRequest);
   framework.use(renderTodoItemsPage.bind(null, TODOITEMS_DATA));
   framework.post("/login", checkLoginCredentials);
   framework.post("/signup", storeSignUpCredentials);

@@ -20,7 +20,7 @@ const TODOITEMS = "./public/todo_items.html";
 const TODOITEMS_DATA = CACHE[TODOITEMS];
 
 const useCookies = function(req, res) {
-  let cookie = req.headers["cookie"];
+  const cookie = req.headers.cookie;
   if (cookie != undefined && cookie != "username=") {
     renderHomepage(HOMEPAGE_DATA, req, res);
     // redirect(res, "/homepage");

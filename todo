@@ -4,5 +4,11 @@
    *  carriage problem
 
 **** refactors ****
-   * dublications
-   *  extract placeholders
+   *  dublications
+   *  remove unnecessary console.logs
+   *  extract constants
+   *  extracts utils
+   *  extract handlers to its own file
+   *  extract page renders to its own file
+   * name withTags should be with tag
+   *  rename previousTodoList to totalTodoLists

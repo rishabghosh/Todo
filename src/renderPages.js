@@ -1,34 +1,35 @@
 const fs = require("fs");
+const readArgs = require("./parser.js");
 const placeholders = require("./placeholders.js");
+const TodoList = require("./todoList.js");
+const Todo = require("./todo.js");
+const USERS = require("../dataBase/users.json");
+const {
+  writeJsonData,
+  withTags,
+  getFilePathForUser,
+  withAnchorTag,
+  getCurrentId
+} = require("./utils.js");
+
 const {
   sendData,
   redirect,
   setCookie,
   getUserName
 } = require("./requestHandlers.js");
-const USERS = require("../dataBase/users.json");
-const readArgs = require("./parser.js");
-const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
-const TodoList = require("./todoList.js");
-const Todo = require("./todo.js");
 
 const {
   EMPTY_STRING,
   EMPTY_OBJECT,
+  USERS_JSON_PATH,
   ROOT,
   POST,
   TD,
-  TR,
-  USERS_JSON_PATH
+  TR
 } = require("./constants.js");
 
 const WRITER = fs.writeFile;
-
-const getCurrentId = function(previousTodoList) {
-  const keyCount = Object.keys(previousTodoList).length;
-  const idNumber = keyCount + 1;
-  return "list_" + idNumber;
-};
 
 const getPreviousTodos = function(req) {
   const path = getFilePathForUser(getUserName(req));
@@ -36,24 +37,24 @@ const getPreviousTodos = function(req) {
   return JSON.parse(previousTodos);
 };
 
-const addNewTodo = function(req, previousTodoList) {
+const addNewTodo = function(req, totalTodoLists) {
   const currentArg = readArgs(req.body);
   if (currentArg.hasOwnProperty("title")) {
     const todoList = new TodoList(currentArg.title);
-    const currentId = getCurrentId(previousTodoList);
-    previousTodoList[currentId] = todoList;
-
+    const currentId = getCurrentId(totalTodoLists);
+    totalTodoLists[currentId] = todoList;
     const path = getFilePathForUser(getUserName(req));
-    writeJsonData(path, previousTodoList, WRITER);
+    writeJsonData(path, totalTodoLists, WRITER);
   }
 };
 
-const getTodoTable = function(previousTodoList) {
-  const ids = Object.keys(previousTodoList).reverse();
-  return ids
+const getTodoTable = function(totalTodoLists) {
+  const allIds = Object.keys(totalTodoLists).reverse();
+  return allIds
     .map(id => {
-      const currentList = previousTodoList[id];
-      const listWithLink = `<a href="/${id}">${currentList.title}</a>`;
+      const currentList = totalTodoLists[id];
+      const link = ROOT + id;
+      const listWithLink = withAnchorTag(link, currentList.title);
       const title = withTags(TD, listWithLink);
       return withTags(TR, title);
     })
@@ -66,9 +67,9 @@ const getNameOfUser = function(Users, username) {
 };
 
 const renderHomepage = function(content, req, res) {
-  const previousTodoList = getPreviousTodos(req);
-  if (req.method === POST) addNewTodo(req, previousTodoList);
-  const todoTable = getTodoTable(previousTodoList);
+  const totalTodoLists = getPreviousTodos(req);
+  if (req.method === POST) addNewTodo(req, totalTodoLists);
+  const todoTable = getTodoTable(totalTodoLists);
   let message = content.replace(placeholders.forTodoLists, todoTable);
   const username = getUserName(req);
   const nameOfUser = getNameOfUser(USERS, username);
@@ -112,7 +113,7 @@ const checkLoginCredentials = function(req, res) {
 };
 
 const getItemTable = function(currentTodoList) {
-  const items = currentTodoList["item"];
+  const items = currentTodoList.item;
   return items
     .map(item => {
       const title = withTags(TD, item);
@@ -123,11 +124,11 @@ const getItemTable = function(currentTodoList) {
 
 const renderTodoItemsPage = function(content, req, res, next) {
   if (req.url.startsWith("/list_")) {
-    const previousTodoList = getPreviousTodos(req);
+    const totalTodoLists = getPreviousTodos(req);
     const id = req.url.slice(1);
-    const currentTodoList = previousTodoList[id];
-    if (req.method === POST) addNewItem(req, previousTodoList, currentTodoList);
-    const todoListTitle = currentTodoList["title"];
+    const currentTodoList = totalTodoLists[id];
+    if (req.method === POST) addNewItem(req, totalTodoLists, currentTodoList);
+    const todoListTitle = currentTodoList.title;
     let message = content.replace(placeholders.forTodoListTitle, todoListTitle);
     message = message.replace(
       placeholders.forTodoItems,
@@ -139,12 +140,12 @@ const renderTodoItemsPage = function(content, req, res, next) {
   next();
 };
 
-const addNewItem = function(req, previousTodoList, currentTodoList) {
+const addNewItem = function(req, totalTodoLists, currentTodoList) {
   const currentArg = readArgs(req.body);
   const todo = new Todo(currentTodoList);
   todo.addItems(currentArg.Title);
   const path = getFilePathForUser(getUserName(req));
-  writeJsonData(path, previousTodoList, WRITER);
+  writeJsonData(path, totalTodoLists, WRITER);
 };
 
 module.exports = {

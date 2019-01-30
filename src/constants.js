@@ -10,6 +10,8 @@ const TR = "tr";
 const EMPTY_OBJECT = {};
 const USERNAME_JSON_PATH = "./dataBase/username.json";
 const USERS_JSON_PATH = "./dataBase/users.json";
+const PLUS = "+";
+const SPACE = " ";
 
 module.exports = {
   EMPTY_STRING,
@@ -23,5 +25,7 @@ module.exports = {
   TR,
   EMPTY_OBJECT,
   USERNAME_JSON_PATH,
-  USERS_JSON_PATH
+  USERS_JSON_PATH,
+  PLUS,
+  SPACE
 };

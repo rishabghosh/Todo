@@ -1,7 +1,10 @@
-const { ROOT, DEFAULT_PAGE } = require("./constants.js");
+const { ROOT, DEFAULT_PAGE, SPACE } = require("./constants.js");
 
 const getPublicPath = url => "./public" + url;
-const printError = error => console.error("error***", error);
+
+const printError = function(error) {
+  if (error) console.error("error is ***", error);
+};
 
 const getFilePath = function(url) {
   return url === ROOT ? DEFAULT_PAGE : getPublicPath(url);
@@ -16,12 +19,22 @@ const withTags = function(tag, content) {
   return `<${tag}> ${content} </${tag}>`;
 };
 
+const withAnchorTag = function(link, content) {
+  return `<a href="${link}"> ${content} </a>`;
+};
+
 const decoder = function(text) {
-  return text.split("+").join(" ");
+  return text.replace(/\+/g, SPACE);
 };
 
 const getFilePathForUser = function(username) {
   return `./dataBase/userTodos/${username}.json`;
+};
+
+const getCurrentId = function(totalTodoLists) {
+  const keyCount = Object.keys(totalTodoLists).length;
+  const idNumber = keyCount + 1;
+  return "list_" + idNumber;
 };
 
 module.exports = {
@@ -29,5 +42,7 @@ module.exports = {
   writeJsonData,
   withTags,
   decoder,
-  getFilePathForUser
+  getFilePathForUser,
+  withAnchorTag,
+  getCurrentId
 };

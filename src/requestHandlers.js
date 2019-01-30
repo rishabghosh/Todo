@@ -18,8 +18,7 @@ const setCookie = function(res, cookie) {
 };
 
 const getUserName = function(req) {
-  console.log("hello");
-  return req.headers["cookie"].split("=")[1];
+  return req.headers.cookie.split("=")[1];
 };
 
 const redirect = function(res, location) {

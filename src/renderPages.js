@@ -6,6 +6,7 @@ const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
 const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
 const TodoList = require("./todoList.js");
+
 const {
   EMPTY_STRING,
   EMPTY_OBJECT,
@@ -33,10 +34,10 @@ const getPreviousTodos = function() {
 
 const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
-  const path = getFilePathForUser(CURRENT_USER.username);
   const todoList = new TodoList(currentArg.Title);
   const currentId = getCurrentId(previousTodoList);
   previousTodoList[currentId] = todoList;
+  const path = getFilePathForUser(CURRENT_USER.username);
   writeJsonData(path, previousTodoList, WRITER);
 };
 
@@ -44,7 +45,8 @@ const getTodoTable = function(previousTodoList) {
   const ids = Object.keys(previousTodoList).reverse();
   return ids
     .map(id => {
-      const title = withTags(TD, previousTodoList[id]["title"]);
+      const listWithLink = `<a href="/${id}">${previousTodoList[id]["title"]}</a>`;
+      const title = withTags(TD, listWithLink);
       return withTags(TR, title);
     })
     .join(EMPTY_STRING);

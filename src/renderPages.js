@@ -5,6 +5,7 @@ const USERS = require("../dataBase/users.json");
 const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
 const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
+const TodoList = require("./todoList.js");
 const {
   EMPTY_STRING,
   EMPTY_OBJECT,
@@ -19,37 +20,34 @@ const {
 const WRITER = fs.writeFile;
 
 const getPreviousTodos = function() {
-  const username = CURRENT_USER.username;
-  const path = getFilePathForUser(username);
+  const path = getFilePathForUser(CURRENT_USER.username);
   const previousTodos = fs.readFileSync(path, "utf8");
   return JSON.parse(previousTodos);
 };
 
-const addNewTodo = function(req, todoList) {
-  const username = CURRENT_USER.username;
-  const writer = fs.writeFile;
+const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
-  const path = getFilePathForUser(username);
-  todoList[currentArg.Title] = [];
-  writeJsonData(path, todoList, writer);
+  const path = getFilePathForUser(CURRENT_USER.username);
+  const todoList = new TodoList(currentArg.Title);
+  previousTodoList[new Date().getTime()] = todoList;
+  writeJsonData(path, previousTodoList, WRITER);
 };
 
-const getTodoTable = function(todoList) {
-  let keys = Object.keys(todoList);
-  return keys
-    .map(todo => {
-      todo = `<a href="www.google.com">${todo}</a>`;
-      let title = withTags(TD, todo);
+const getTodoTable = function(previousTodoList) {
+  const ids = Object.keys(previousTodoList).reverse();
+  return ids
+    .map(id => {
+      const title = withTags(TD, previousTodoList[id]["title"]);
       return withTags(TR, title);
     })
     .join(EMPTY_STRING);
 };
 
 const renderHomepage = function(content, req, res) {
-  const todoList = getPreviousTodos();
-  if (req.method === POST) addNewTodo(req, todoList);
-  const todoTable = getTodoTable(todoList);
-  let message = content.replace(placeholders.forTodoList, todoTable);
+  const previousTodoList = getPreviousTodos();
+  if (req.method === POST) addNewTodo(req, previousTodoList);
+  const todoTable = getTodoTable(previousTodoList);
+  const message = content.replace(placeholders.forTodoList, todoTable);
   sendData(req, res, message);
 };
 
@@ -74,7 +72,8 @@ const storeSignUpCredentials = function(req, res) {
   USERS[credentials.username] = credentials;
   writeJsonData(USERS_JSON_PATH, USERS, WRITER);
   writeJsonData(path, EMPTY_OBJECT, WRITER);
-  redirect(res, ROOT); };
+  redirect(res, ROOT);
+};
 
 const checkLoginCredentials = function(req, res) {
   const credentials = readArgs(req.body);

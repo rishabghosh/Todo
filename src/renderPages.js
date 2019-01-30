@@ -1,8 +1,12 @@
 const fs = require("fs");
 const placeholders = require("./placeholders.js");
-const { sendData, redirect } = require("./requestHandlers.js");
+const {
+  sendData,
+  redirect,
+  setCookie,
+  getUserName
+} = require("./requestHandlers.js");
 const USERS = require("../dataBase/users.json");
-const CURRENT_USER = require("../dataBase/username.json");
 const readArgs = require("./parser.js");
 const { writeJsonData, withTags, getFilePathForUser } = require("./utils.js");
 const TodoList = require("./todoList.js");
@@ -14,7 +18,6 @@ const {
   POST,
   TD,
   TR,
-  USERNAME_JSON_PATH,
   USERS_JSON_PATH
 } = require("./constants.js");
 
@@ -26,8 +29,8 @@ const getCurrentId = function(previousTodoList) {
   return "list_" + idNumber;
 };
 
-const getPreviousTodos = function() {
-  const path = getFilePathForUser(CURRENT_USER.username);
+const getPreviousTodos = function(req) {
+  const path = getFilePathForUser(getUserName(req));
   const previousTodos = fs.readFileSync(path, "utf8");
   return JSON.parse(previousTodos);
 };
@@ -37,7 +40,7 @@ const addNewTodo = function(req, previousTodoList) {
   const todoList = new TodoList(currentArg.Title);
   const currentId = getCurrentId(previousTodoList);
   previousTodoList[currentId] = todoList;
-  const path = getFilePathForUser(CURRENT_USER.username);
+  const path = getFilePathForUser(getUserName(req));
   writeJsonData(path, previousTodoList, WRITER);
 };
 
@@ -55,7 +58,7 @@ const getTodoTable = function(previousTodoList) {
 };
 
 const renderHomepage = function(content, req, res) {
-  const previousTodoList = getPreviousTodos();
+  const previousTodoList = getPreviousTodos(req);
   if (req.method === POST) addNewTodo(req, previousTodoList);
   const todoTable = getTodoTable(previousTodoList);
   const message = content.replace(placeholders.forTodoList, todoTable);
@@ -63,8 +66,7 @@ const renderHomepage = function(content, req, res) {
 };
 
 const logOut = function(req, res) {
-  CURRENT_USER.username = EMPTY_STRING;
-  writeJsonData(USERNAME_JSON_PATH, CURRENT_USER, WRITER);
+  res.setHeader("Set-Cookie", `username=; expires=""`);
   redirect(res, ROOT);
 };
 
@@ -89,8 +91,8 @@ const storeSignUpCredentials = function(req, res) {
 const checkLoginCredentials = function(req, res) {
   const credentials = readArgs(req.body);
   if (hasCorrectCredentials(credentials)) {
-    CURRENT_USER.username = credentials.username;
-    writeJsonData(USERNAME_JSON_PATH, CURRENT_USER, WRITER);
+    let username = credentials.username;
+    setCookie(res, username);
     redirect(res, "/homepage");
     return;
   }
@@ -99,9 +101,8 @@ const checkLoginCredentials = function(req, res) {
 
 const renderTodoItemsPage = function(content, req, res, next) {
   if (req.url.startsWith("/list_")) {
-    const previousTodoList = getPreviousTodos();
+    const previousTodoList = getPreviousTodos(req);
     const id = req.url.slice(1);
-
     const todoListTitle = previousTodoList[id]["title"];
     const message = content.replace("<!--todo_list_tilte-->", todoListTitle);
     sendData(req, res, message);

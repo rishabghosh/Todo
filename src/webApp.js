@@ -19,6 +19,16 @@ const HOMEPAGE_DATA = CACHE[HOMEPAGE_PATH];
 const TODOITEMS = "./public/todo_items.html";
 const TODOITEMS_DATA = CACHE[TODOITEMS];
 
+const useCookies = function(req, res) {
+  let cookie = req.headers["cookie"];
+  console.log(cookie);
+  if (cookie !== "username=") {
+    renderHomepage(HOMEPAGE_DATA, req, res);
+    return;
+  }
+  serveFiles(fs, req, res);
+};
+
 const app = function(req, res) {
   const framework = new Framework();
   framework.use(readBody);
@@ -26,6 +36,7 @@ const app = function(req, res) {
   framework.post("/login", checkLoginCredentials);
   framework.post("/signup", storeSignUpCredentials);
   framework.post("/logout", logOut);
+  framework.get("/", useCookies);
   framework.get("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
   framework.post("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
   framework.use(serveFiles.bind(null, fs));

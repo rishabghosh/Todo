@@ -13,6 +13,14 @@ const invalidRequest = function(req, res) {
   res.end();
 };
 
+const setCookie = function(res, cookie) {
+  res.setHeader("Set-Cookie", "username=" + cookie);
+};
+
+const getUserName = function(req) {
+  return req.headers["cookie"].split("=")[1];
+};
+
 const redirect = function(res, location) {
   res.statusCode = 301;
   res.setHeader("Location", location);
@@ -40,12 +48,13 @@ const serveFiles = function(fs, req, res) {
   });
 };
 
-
 module.exports = {
   readBody,
   serveFiles,
   sendData,
   invalidRequest,
   redirect,
-  getFilePath
+  getFilePath,
+  setCookie,
+  getUserName
 };

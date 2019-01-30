@@ -38,10 +38,14 @@ const getPreviousTodos = function(req) {
 
 const addNewTodo = function(req, previousTodoList) {
   const currentArg = readArgs(req.body);
+  // console.log("currentArgs*******", currentArg);
   if (currentArg.hasOwnProperty("title")) {
-    const todoList = new TodoList(currentArg.Title);
+    const todoList = new TodoList(currentArg.title);
+    console.log("todoList****** ", todoList);
     const currentId = getCurrentId(previousTodoList);
+    console.log("currentId ********", currentId);
     previousTodoList[currentId] = todoList;
+
     const path = getFilePathForUser(getUserName(req));
     writeJsonData(path, previousTodoList, WRITER);
   }
@@ -64,7 +68,10 @@ const renderHomepage = function(content, req, res) {
   const previousTodoList = getPreviousTodos(req);
   if (req.method === POST) addNewTodo(req, previousTodoList);
   const todoTable = getTodoTable(previousTodoList);
-  const message = content.replace(placeholders.forTodoList, todoTable);
+  let message = content.replace(placeholders.forTodoList, todoTable);
+  const username = getUserName(req);
+  const nameOfUser = USERS[username]["name"];
+  message = message.replace("<!--user-->", nameOfUser);
   sendData(req, res, message);
 };
 

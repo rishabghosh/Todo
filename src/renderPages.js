@@ -17,7 +17,7 @@ const {
   getNameOfUser
 } = require("./utils.js");
 
-const WRITER = fs.writeFile;
+const WRITER = fs.writeFileSync;
 
 const getPreviousTodos = function(req) {
   const username = getUserName(req);
@@ -34,6 +34,7 @@ const addNewTodo = function(req, totalTodoLists) {
     totalTodoLists[currentId] = todoList;
     const username = getUserName(req);
     const path = getFilePathForUser(username);
+    console.log("*********", totalTodoLists);
     writeJsonData(path, totalTodoLists, WRITER);
   }
 };
@@ -59,7 +60,6 @@ const addTodoList = function(req, res) {
 
 const renderHomepage = function(content, req, res) {
   const totalTodoLists = getPreviousTodos(req);
-  if (req.method === POST) addNewTodo(req, totalTodoLists);
   const username = getUserName(req);
   const nameOfUser = getNameOfUser(USERS, username);
   const todoTable = getTodoTable(totalTodoLists);

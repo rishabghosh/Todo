@@ -1,5 +1,6 @@
 const { getFilePath } = require("./utils.js");
 const { ERROR_MESSAGE } = require("./constants.js");
+const fs = require("fs");
 
 const sendData = function(req, res, data) {
   res.statusCode = 200;
@@ -64,6 +65,26 @@ const logRequest = function(req, res, next) {
   next();
 };
 
+const homepageFiles = [
+  "/",
+  "/style/loginpage.css",
+  "/js/loginPage.js",
+  "/login",
+  "/signup"
+];
+
+
+const handleForbiddenRequests = function(req, res, next) {
+  const cookie = req.headers.cookie;
+  if (!homepageFiles.includes(req.url)) {
+    if (cookie === undefined || cookie === "username=") {
+      redirect(res, "/");
+      return;
+    }
+  }  
+  next();
+};
+
 module.exports = {
   readBody,
   serveFiles,
@@ -73,5 +94,6 @@ module.exports = {
   getFilePath,
   setCookie,
   logRequest,
-  useCookies
+  useCookies,
+  handleForbiddenRequests
 };

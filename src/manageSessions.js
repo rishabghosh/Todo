@@ -18,6 +18,7 @@ const hasCorrectCredentials = function(credentials) {
     UsersCredentials.password === givenPassword
   );
 };
+
 const checkLoginCredentials = function(req, res) {
   const credentials = readArgs(req.body);
   if (hasCorrectCredentials(credentials)) {

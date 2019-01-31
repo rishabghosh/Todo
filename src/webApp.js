@@ -14,7 +14,8 @@ const {
   readBody,
   serveFiles,
   logRequest,
-  useCookies
+  useCookies,
+  handleForbiddenRequests
 } = require("./requestHandlers.js");
 
 const CACHE = createCache(fs);
@@ -25,11 +26,12 @@ const app = function(req, res) {
   const framework = new Framework();
   framework.use(readBody);
   framework.use(logRequest);
+  framework.get("/", useCookies.bind(null, fs));
+  framework.use(handleForbiddenRequests);
   framework.use(renderTodoItemsPage.bind(null, TODOITEMS_DATA));
   framework.post("/login", checkLoginCredentials);
   framework.post("/signup", storeSignUpCredentials);
   framework.post("/logout", logOut);
-  framework.get("/", useCookies.bind(null, fs));
   framework.get("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
   framework.post("/homepage", addTodoList);
   framework.use(serveFiles.bind(null, fs));

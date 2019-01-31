@@ -1,9 +1,21 @@
 .form_style {
+
 	font-size: 25px;
 	border : 1px solid black;
 	padding: 20px;
-	margin: auto auto;
+	margin: 130px auto;
 	width: 400px;
+}
+
+input {
+	height: 15px;
+	width: 150px;
+}
+
+.button {
+	height: 30px;
+	width: auto;
+	cursor: pointer;
 }
 
 #login {

@@ -4,7 +4,7 @@ const placeholders = require("./placeholders.js");
 const TodoList = require("./todoList.js");
 const Todo = require("./todo.js");
 const USERS = require("../dataBase/users.json");
-const { sendData } = require("./requestHandlers.js");
+const { sendData, redirect } = require("./requestHandlers.js");
 const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");
 
 const {
@@ -49,6 +49,12 @@ const getTodoTable = function(totalTodoLists) {
       return withTag(TR, title);
     })
     .join(EMPTY_STRING);
+};
+
+const addTodoList = function(req, res) {
+  const totalTodoLists = getPreviousTodos(req);
+  addNewTodo(req, totalTodoLists);
+  redirect(res, "/homepage");
 };
 
 const renderHomepage = function(content, req, res) {
@@ -101,5 +107,6 @@ const addNewItem = function(req, totalTodoLists, currentTodoList) {
 
 module.exports = {
   renderHomepage,
-  renderTodoItemsPage
+  renderTodoItemsPage,
+  addTodoList
 };

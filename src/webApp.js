@@ -3,7 +3,11 @@ const { Framework } = require("./webFramework.js");
 const { createCache } = require("./cache.js");
 const storeSignUpCredentials = require("./signUp.js");
 const { logOut, checkLoginCredentials } = require("./manageSessions.js");
-const { renderHomepage, renderTodoItemsPage } = require("./renderPages.js");
+const {
+  renderHomepage,
+  renderTodoItemsPage,
+  addTodoList
+} = require("./renderPages.js");
 const { HOMEPAGE_PATH, TODOITEMS_PATH } = require("./constants.js");
 
 const {
@@ -27,7 +31,7 @@ const app = function(req, res) {
   framework.post("/logout", logOut);
   framework.get("/", useCookies.bind(null, fs));
   framework.get("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
-  framework.post("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
+  framework.post("/homepage", addTodoList);
   framework.use(serveFiles.bind(null, fs));
   framework.handleRequest(req, res);
 };

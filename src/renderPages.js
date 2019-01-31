@@ -14,15 +14,11 @@ const {
 
 const {
   sendData,
-  redirect,
-  setCookie,
   getUserName
 } = require("./requestHandlers.js");
 
 const {
   EMPTY_STRING,
-  EMPTY_OBJECT,
-  USERS_JSON_PATH,
   ROOT,
   POST,
   TD,
@@ -77,40 +73,7 @@ const renderHomepage = function(content, req, res) {
   sendData(req, res, message);
 };
 
-const logOut = function(req, res) {
-  res.setHeader("Set-Cookie", "username=; expires=\"\"");
-  redirect(res, ROOT);
-};
 
-const hasCorrectCredentials = function(credentials) {
-  const givenUsername = credentials.username;
-  const givenPassword = credentials.password;
-  const UsersCredentials = USERS[givenUsername];
-  return (
-    USERS.hasOwnProperty(givenUsername) &&
-    UsersCredentials.password === givenPassword
-  );
-};
-
-const storeSignUpCredentials = function(req, res) {
-  const credentials = readArgs(req.body);
-  const path = getFilePathForUser(credentials.username);
-  USERS[credentials.username] = credentials;
-  writeJsonData(USERS_JSON_PATH, USERS, WRITER);
-  writeJsonData(path, EMPTY_OBJECT, WRITER);
-  redirect(res, ROOT);
-};
-
-const checkLoginCredentials = function(req, res) {
-  const credentials = readArgs(req.body);
-  if (hasCorrectCredentials(credentials)) {
-    let username = credentials.username;
-    setCookie(res, username);
-    redirect(res, "/homepage");
-    return;
-  }
-  redirect(res, ROOT);
-};
 
 const getItemTable = function(currentTodoList) {
   const items = currentTodoList.item;
@@ -150,8 +113,5 @@ const addNewItem = function(req, totalTodoLists, currentTodoList) {
 
 module.exports = {
   renderHomepage,
-  checkLoginCredentials,
-  storeSignUpCredentials,
-  logOut,
   renderTodoItemsPage
 };

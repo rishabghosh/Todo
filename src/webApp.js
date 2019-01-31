@@ -1,13 +1,8 @@
 const fs = require("fs");
 const { Framework } = require("./webFramework.js");
-
-const {
-  renderHomepage,
-  checkLoginCredentials,
-  storeSignUpCredentials,
-  logOut,
-  renderTodoItemsPage
-} = require("./renderPages.js");
+const { logOut, checkLoginCredentials } = require("./manageSessions.js");
+const storeSignUpCredentials = require("./signUp.js");
+const { renderHomepage, renderTodoItemsPage } = require("./renderPages.js");
 
 const { readBody, serveFiles } = require("./requestHandlers.js");
 
@@ -29,7 +24,7 @@ const useCookies = function(req, res) {
   serveFiles(fs, req, res);
 };
 
-const logRequest = function (req, res, next) {
+const logRequest = function(req, res, next) {
   console.log("\n------ LOGS -------\n");
   console.log("requested method ->", req.method);
   console.log("requested url -> ", req.url);

@@ -3,12 +3,17 @@
 ***** bug fix ******
    *  carriage problem
 
+***** ui *****
+   * add profile name in todo_items page
+   *  
+
 **** refactors ****
    *  dublications
-   *  remove unnecessary console.logs
    *  extract constants
    *  extracts utils
    *  extract handlers to its own file
    *  extract page renders to its own file
-   * name withTags should be with tag
+   *  name withTags should be with tag
    *  rename previousTodoList to totalTodoLists
+   *  getUsername should be extract username
+   *  checkLoginCredentials could be logIn?

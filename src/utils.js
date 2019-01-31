@@ -15,7 +15,7 @@ const writeJsonData = function(path, data, writer) {
   writer(path, stringifiedData, printError);
 };
 
-const withTags = function(tag, content) {
+const withTag = function(tag, content) {
   return `<${tag}> ${content} </${tag}>`;
 };
 
@@ -37,12 +37,23 @@ const getCurrentId = function(totalTodoLists) {
   return "list_" + idNumber;
 };
 
+const getUserName = function(req) {
+  return req.headers.cookie.split("=")[1];
+};
+
+const getNameOfUser = function(Users, username) {
+  const selectedUser = Users[username];
+  return selectedUser.name;
+};
+
 module.exports = {
   getFilePath,
   writeJsonData,
-  withTags,
+  withTag,
   decoder,
   getFilePathForUser,
   withAnchorTag,
-  getCurrentId
+  getCurrentId,
+  getUserName,
+  getNameOfUser
 };

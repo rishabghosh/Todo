@@ -4,31 +4,24 @@ const placeholders = require("./placeholders.js");
 const TodoList = require("./todoList.js");
 const Todo = require("./todo.js");
 const USERS = require("../dataBase/users.json");
+const { sendData } = require("./requestHandlers.js");
+const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");
+
 const {
   writeJsonData,
-  withTags,
+  withTag,
   getFilePathForUser,
   withAnchorTag,
-  getCurrentId
+  getCurrentId,
+  getUserName,
+  getNameOfUser
 } = require("./utils.js");
-
-const {
-  sendData,
-  getUserName
-} = require("./requestHandlers.js");
-
-const {
-  EMPTY_STRING,
-  ROOT,
-  POST,
-  TD,
-  TR
-} = require("./constants.js");
 
 const WRITER = fs.writeFile;
 
 const getPreviousTodos = function(req) {
-  const path = getFilePathForUser(getUserName(req));
+  const username = getUserName(req);
+  const path = getFilePathForUser(username);
   const previousTodos = fs.readFileSync(path, "utf8");
   return JSON.parse(previousTodos);
 };
@@ -39,7 +32,8 @@ const addNewTodo = function(req, totalTodoLists) {
     const todoList = new TodoList(currentArg.title);
     const currentId = getCurrentId(totalTodoLists);
     totalTodoLists[currentId] = todoList;
-    const path = getFilePathForUser(getUserName(req));
+    const username = getUserName(req);
+    const path = getFilePathForUser(username);
     writeJsonData(path, totalTodoLists, WRITER);
   }
 };
@@ -51,36 +45,29 @@ const getTodoTable = function(totalTodoLists) {
       const currentList = totalTodoLists[id];
       const link = ROOT + id;
       const listWithLink = withAnchorTag(link, currentList.title);
-      const title = withTags(TD, listWithLink);
-      return withTags(TR, title);
+      const title = withTag(TD, listWithLink);
+      return withTag(TR, title);
     })
     .join(EMPTY_STRING);
-};
-
-const getNameOfUser = function(Users, username) {
-  const selectedUser = Users[username];
-  return selectedUser.name;
 };
 
 const renderHomepage = function(content, req, res) {
   const totalTodoLists = getPreviousTodos(req);
   if (req.method === POST) addNewTodo(req, totalTodoLists);
-  const todoTable = getTodoTable(totalTodoLists);
-  let message = content.replace(placeholders.forTodoLists, todoTable);
   const username = getUserName(req);
   const nameOfUser = getNameOfUser(USERS, username);
+  const todoTable = getTodoTable(totalTodoLists);
+  let message = content.replace(placeholders.forTodoLists, todoTable);
   message = message.replace(placeholders.forNameOfUser, nameOfUser);
   sendData(req, res, message);
 };
-
-
 
 const getItemTable = function(currentTodoList) {
   const items = currentTodoList.item;
   return items
     .map(item => {
-      const title = withTags(TD, item);
-      return withTags(TR, title);
+      const title = withTag(TD, item);
+      return withTag(TR, title);
     })
     .join(EMPTY_STRING);
 };
@@ -107,7 +94,8 @@ const addNewItem = function(req, totalTodoLists, currentTodoList) {
   const currentArg = readArgs(req.body);
   const todo = new Todo(currentTodoList);
   todo.addItems(currentArg.Title);
-  const path = getFilePathForUser(getUserName(req));
+  const username = getUserName(req);
+  const path = getFilePathForUser(username);
   writeJsonData(path, totalTodoLists, WRITER);
 };
 

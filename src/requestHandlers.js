@@ -17,10 +17,6 @@ const setCookie = function(res, cookie) {
   res.setHeader("Set-Cookie", "username=" + cookie);
 };
 
-const getUserName = function(req) {
-  return req.headers.cookie.split("=")[1];
-};
-
 const redirect = function(res, location) {
   res.statusCode = 301;
   res.setHeader("Location", location);
@@ -48,6 +44,26 @@ const serveFiles = function(fs, req, res) {
   });
 };
 
+const useCookies = function(fs, req, res) {
+  const cookie = req.headers.cookie;
+  if (cookie != undefined && cookie != "username=") {
+    // renderHomepage(HOMEPAGE_DATA, req, res);
+    redirect(res, "/homepage");
+    return;
+  }
+  serveFiles(fs, req, res);
+};
+
+const logRequest = function(req, res, next) {
+  console.log("\n------ LOGS -------\n");
+  console.log("requested method ->", req.method);
+  console.log("requested url -> ", req.url);
+  console.log("headers ->", JSON.stringify(req.headers, null, 2));
+  console.log("body ->", req.body);
+  console.log("\n ------ END ------- \n");
+  next();
+};
+
 module.exports = {
   readBody,
   serveFiles,
@@ -56,5 +72,6 @@ module.exports = {
   redirect,
   getFilePath,
   setCookie,
-  getUserName
+  logRequest,
+  useCookies
 };

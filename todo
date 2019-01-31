@@ -10,10 +10,9 @@
 **** refactors ****
    *  dublications
    *  extract constants
-   *  extracts utils
-   *  extract handlers to its own file
-   *  extract page renders to its own file
-   *  name withTags should be with tag
-   *  rename previousTodoList to totalTodoLists
-   *  getUsername should be extract username
    *  checkLoginCredentials could be logIn?
+   *  fs should be passed from webApp.js
+   *  rename Framework to manageHandlers
+   *  delete users.js
+   *  users should be passed from webApp.js
+   *  getPrevious todos should be passed from webApp.js

@@ -1,6 +1,7 @@
 const EMPTY_STRING = "";
 const HOMEPAGE_PATH = "./public/homepage.html";
 const TODO_JSON_PATH = "./dataBase/todoList.json";
+const TODOITEMS_PATH = "./public/todo_items.html";
 const ERROR_MESSAGE = "Invalid Request";
 const ROOT = "/";
 const DEFAULT_PAGE = "./public/index.html";
@@ -17,6 +18,7 @@ module.exports = {
   EMPTY_STRING,
   HOMEPAGE_PATH,
   TODO_JSON_PATH,
+  TODOITEMS_PATH,
   ERROR_MESSAGE,
   DEFAULT_PAGE,
   ROOT,

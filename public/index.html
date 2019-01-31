@@ -4,58 +4,66 @@
 <head>
 	<title>Todo-Login</title>
 	<link rel="stylesheet" type="text/css" href="style/loginpage.css" />
+	<script src="js/loginPage.js"></script>
 </head>
 
 <body>
 
-	<form method="POST" action="/login">
-		<p>
-			<span>Already a user?</span>
-			<h3>Sign-in</h3>
-		</p>
+	<div id="login" class="form_style">
+		<form method="POST" action="/login">
+			<p>
+				<span>Already a user?</span>
+				<h3>Sign-in</h3>
+			</p>
 
-		<p>
-			<label>Username :</label>
-			<input type="text" name="username" required>
-		</p>
+			<p>
+				<label>Username :</label>
+				<input type="text" name="username" required>
+			</p>
 
-		<p>
-			<label>Password :</label>
-			<input type="password" name="password" required>
-		</p>
+			<p>
+				<label>Password :</label>
+				<input type="password" name="password" required>
+			</p>
 
-		<p>
-			<input type="submit" value="Login">
-		</p>
+			<p>
+				<input type="submit" value="Login">
+			</p>
 
-	</form>
+		</form>
+		<span id="sign_up_link">click here to sign-up</span>
+	</div>
 
-	<form method="POST" action="/signup">
-		<p>
-			<span>Don't have an account?</span>
-			<h3>Sign-up</h3>
-		</p>
+	<div id="sign_up" class="form_style">
+		<form method="POST" action="/signup">
+			<p>
+				<span>Don't have an account?</span>
+				<h3>Sign-up</h3>
+			</p>
 
-		<p>
-			<label>Name :</label>
-			<input name="name" required>
-		</p>
+			<p>
+				<label>Name :</label>
+				<input name="name" required>
+			</p>
 
-		<p>
-			<label>Username :</label>
-			<input type="text" name="username" required>
-		</p>
+			<p>
+				<label>Username :</label>
+				<input type="text" name="username" required>
+			</p>
 
-		<p>
-			<label>Password :</label>
-			<input type="password" name="password" required>
-		</p>
+			<p>
+				<label>Password :</label>
+				<input type="password" name="password" required>
+			</p>
 
-		<p>
-			<input type="submit" value="Sign Up">
-		</p>
+			<p>
+				<input type="submit" value="Sign Up">
+			</p>
 
-	</form>
+		</form>
+		<span id="login_link">click here to login</span>
+	</div>
+
 </body>
 
 </html>

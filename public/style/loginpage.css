@@ -1,5 +1,23 @@
-form {
+.form_style {
+	font-size: 25px;
 	border : 1px solid black;
 	padding: 20px;
-	margin: 20px;
+	margin: auto auto;
+	width: 400px;
+}
+
+#login {
+	display: block;
+}
+
+#sign_up {
+	display: none;
+}
+
+#sign_up_link {
+	cursor: pointer;
+}
+
+#login_link {
+	cursor: pointer;
 }

@@ -15,4 +15,5 @@ const postData = function() {
     }); // parses response to JSON
 };
 
+
 window.onload = postData;

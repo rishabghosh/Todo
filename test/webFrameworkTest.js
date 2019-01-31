@@ -2,30 +2,30 @@
 
 const chai = require("chai");
 const assert = chai.assert;
-const { Framework, isMatching } = require("../src/webFramework.js");
+const { ManageHandlers, isMatching } = require("../src/webFramework.js");
 
-describe("Framework", () => {
+describe("ManageHandlers", () => {
   const sum = (a, b) => a + b;
   it("use method should push the handler into routes", () => {
-    const framework = new Framework();
-    framework.use(sum);
-    assert.deepStrictEqual(framework.routes, [{ handler: sum }]);
+    const manageHandlers = new ManageHandlers();
+    manageHandlers.use(sum);
+    assert.deepStrictEqual(manageHandlers.routes, [{ handler: sum }]);
   });
 
   it("get method should push method as GET,url and handler into routes", () => {
     const url = "/";
-    const framework = new Framework();
+    const manageHandlers = new ManageHandlers();
     const expectedOutput = [{ method: "GET", url: "/", handler: sum }];
-    framework.get(url, sum);
-    assert.deepStrictEqual(framework.routes, expectedOutput);
+    manageHandlers.get(url, sum);
+    assert.deepStrictEqual(manageHandlers.routes, expectedOutput);
   });
 
   it("post method should push method as POST, url and handler into routes", () => {
     const url = "/homepage";
-    const framework = new Framework();
+    const manageHandlers = new ManageHandlers();
     const expectedOutput = [{ method: "POST", url: "/homepage", handler: sum }];
-    framework.post(url, sum);
-    assert.deepStrictEqual(framework.routes, expectedOutput);
+    manageHandlers.post(url, sum);
+    assert.deepStrictEqual(manageHandlers.routes, expectedOutput);
   });
 
   it("requestHandler method should invoke functions of matching routes with req and res", () => {
@@ -37,10 +37,10 @@ describe("Framework", () => {
       next();
     };
 
-    const framework = new Framework();
-    framework.use(asserter);
-    framework.use(callNext);
-    framework.handleRequest("request", "response");
+    const manageHandlers = new ManageHandlers();
+    manageHandlers.use(asserter);
+    manageHandlers.use(callNext);
+    manageHandlers.handleRequest("request", "response");
   });
 });
 

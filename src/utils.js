@@ -24,7 +24,8 @@ const withAnchorTag = function(link, content) {
 };
 
 const decoder = function(text) {
-  return text.replace(/\+/g, SPACE);
+  const decodedText = decodeURIComponent(text);
+  return decodedText.replace(/\+/g, SPACE);
 };
 
 const getFilePathForUser = function(username) {

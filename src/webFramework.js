@@ -1,5 +1,4 @@
 const hasOnlyHandler = function(route) {
-  //how about !route["method"] && !route["url"]
   return !route.hasOwnProperty("method") && !route.hasOwnProperty("url");
 };
 
@@ -8,7 +7,7 @@ const isMatching = function(req, route) {
   return req.url === route.url && req.method === route.method;
 };
 
-class Framework {
+class ManageHandlers {
   constructor() {
     this.routes = [];
   }
@@ -40,6 +39,6 @@ class Framework {
 }
 
 module.exports = {
-  Framework,
+  ManageHandlers,
   isMatching
 };

@@ -9,10 +9,8 @@
 
 **** refactors ****
    *  dublications
-   *  extract constants
    *  checkLoginCredentials could be logIn?
    *  fs should be passed from webApp.js
    *  rename Framework to manageHandlers
    *  users should be passed from webApp.js
    *  getPrevious todos should be passed from webApp.js
-   *  serverShould not crash when not logged in but some url is hit

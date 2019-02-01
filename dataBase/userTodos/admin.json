@@ -1,12 +1,19 @@
 {
   "list_1": {
-    "title": "qwefdgf",
+    "title": "travelling",
     "description": "",
     "item": []
   },
   "list_2": {
-    "title": "fgghjk",
+    "title": "new item",
     "description": "",
-    "item": []
+    "item": [
+      "want to visit mumbai",
+      "want to visit mumbai",
+      "want to visit mumbai",
+      "want to visit mumbai",
+      "want to visit mumbai",
+      "want to visit mumbai"
+    ]
   }
 }

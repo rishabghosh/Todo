@@ -1,8 +1,7 @@
 const readArgs = require("./parser.js");
-const { redirect } = require("./requestHandlers.js");
+const { redirect, setCookie } = require("./requestHandlers.js");
 const { ROOT } = require("./constants.js");
 const USERS = require("../dataBase/users.json");
-const { setCookie } = require("./requestHandlers.js");
 
 const logOut = function(req, res) {
   res.setHeader("Set-Cookie", "username=; expires=\"\"");

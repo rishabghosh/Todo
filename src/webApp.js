@@ -15,7 +15,8 @@ const {
   serveFiles,
   logRequest,
   useCookies,
-  handleForbiddenRequests
+  handleForbiddenRequests,
+  checkCookieValidation
 } = require("./requestHandlers.js");
 
 const CACHE = createCache(fs);
@@ -26,6 +27,7 @@ const app = function(req, res) {
   const manageHandlers = new ManageHandlers();
   manageHandlers.use(readBody);
   manageHandlers.use(logRequest);
+  manageHandlers.use(checkCookieValidation);
   manageHandlers.get("/", useCookies.bind(null, fs));
   manageHandlers.use(handleForbiddenRequests);
   manageHandlers.use(renderTodoItemsPage.bind(null, TODOITEMS_DATA));

@@ -4,7 +4,7 @@ const placeholders = require("./placeholders.js");
 const TodoList = require("./todoList.js");
 const Todo = require("./todo.js");
 const USERS = require("../dataBase/users.json");
-const { sendData, redirect } = require("./requestHandlers.js");
+const { sendData, redirect, invalidRequest } = require("./requestHandlers.js");
 const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");
 
 const {
@@ -19,7 +19,7 @@ const {
 
 const WRITER = fs.writeFileSync;
 
-const getPreviousTodos = function(req) {
+const getPreviousTodos = function(req, res) {
   const username = getUserName(req);
   const path = getFilePathForUser(username);
   const previousTodos = fs.readFileSync(path, "utf8");
@@ -53,13 +53,13 @@ const getTodoTable = function(totalTodoLists) {
 };
 
 const addTodoList = function(req, res) {
-  const totalTodoLists = getPreviousTodos(req);
+  const totalTodoLists = getPreviousTodos(req, res);
   addNewTodo(req, totalTodoLists);
   redirect(res, "/homepage");
 };
 
 const renderHomepage = function(content, req, res) {
-  const totalTodoLists = getPreviousTodos(req);
+  const totalTodoLists = getPreviousTodos(req, res);
   const username = getUserName(req);
   const nameOfUser = getNameOfUser(USERS, username);
   const todoTable = getTodoTable(totalTodoLists);
@@ -80,18 +80,24 @@ const getItemTable = function(currentTodoList) {
 
 const renderTodoItemsPage = function(content, req, res, next) {
   if (req.url.startsWith("/list_")) {
-    const totalTodoLists = getPreviousTodos(req);
+    const totalTodoLists = getPreviousTodos(req, res);
+    const allLists = Object.keys(totalTodoLists);
     const id = req.url.slice(1);
-    const currentTodoList = totalTodoLists[id];
-    if (req.method === POST) addNewItem(req, totalTodoLists, currentTodoList);
-    const todoListTitle = currentTodoList.title;
-    let message = content.replace(placeholders.forTodoListTitle, todoListTitle);
-    message = message.replace(
-      placeholders.forTodoItems,
-      getItemTable(currentTodoList)
-    );
-    sendData(req, res, message);
-    return;
+    if (allLists.includes(id)) {
+      const currentTodoList = totalTodoLists[id];
+      if (req.method === POST) addNewItem(req, totalTodoLists, currentTodoList);
+      const todoListTitle = currentTodoList.title;
+      let message = content.replace(
+        placeholders.forTodoListTitle,
+        todoListTitle
+      );
+      message = message.replace(
+        placeholders.forTodoItems,
+        getItemTable(currentTodoList)
+      );
+      sendData(req, res, message);
+      return;
+    }
   }
   next();
 };

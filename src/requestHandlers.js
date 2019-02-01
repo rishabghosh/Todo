@@ -1,4 +1,4 @@
-const { getFilePath } = require("./utils.js");
+const { getFilePath, getFilePathForUser } = require("./utils.js");
 const { ERROR_MESSAGE } = require("./constants.js");
 const fs = require("fs");
 
@@ -15,6 +15,7 @@ const invalidRequest = function(req, res) {
 };
 
 const setCookie = function(res, cookie) {
+  console.log(cookie);
   res.setHeader("Set-Cookie", "username=" + cookie);
 };
 
@@ -48,7 +49,6 @@ const serveFiles = function(fs, req, res) {
 const useCookies = function(fs, req, res) {
   const cookie = req.headers.cookie;
   if (cookie != undefined && cookie != "username=") {
-    // renderHomepage(HOMEPAGE_DATA, req, res);
     redirect(res, "/homepage");
     return;
   }
@@ -56,12 +56,12 @@ const useCookies = function(fs, req, res) {
 };
 
 const logRequest = function(req, res, next) {
-  console.log("\n------ LOGS -------\n");
-  console.log("requested method ->", req.method);
-  console.log("requested url -> ", req.url);
-  console.log("headers ->", JSON.stringify(req.headers, null, 2));
-  console.log("body ->", req.body);
-  console.log("\n ------ END ------- \n");
+  // console.log("\n------ LOGS -------\n");
+  // console.log("requested method ->", req.method);
+  // console.log("requested url -> ", req.url);
+  // console.log("headers ->", JSON.stringify(req.headers, null, 2));
+  // console.log("body ->", req.body);
+  // console.log("\n ------ END ------- \n");
   next();
 };
 
@@ -73,7 +73,6 @@ const homepageFiles = [
   "/signup"
 ];
 
-
 const handleForbiddenRequests = function(req, res, next) {
   const cookie = req.headers.cookie;
   if (!homepageFiles.includes(req.url)) {
@@ -81,7 +80,21 @@ const handleForbiddenRequests = function(req, res, next) {
       redirect(res, "/");
       return;
     }
-  }  
+  }
+  next();
+};
+
+const checkCookieValidation = function(req, res, next) {
+  const cookie = req.headers.cookie;
+  if (cookie !== undefined && cookie !== "username=") {
+    const username = cookie.split("=")[1];
+    const path = getFilePathForUser(username);
+    if (!fs.existsSync(path)) {
+      res.setHeader("Set-Cookie", "username=; expires=\"\"");
+      redirect(res, "/");
+      return;
+    }
+  }
   next();
 };
 
@@ -95,5 +108,6 @@ module.exports = {
   setCookie,
   logRequest,
   useCookies,
-  handleForbiddenRequests
+  handleForbiddenRequests,
+  checkCookieValidation
 };

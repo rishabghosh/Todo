@@ -1,7 +1,10 @@
 ***** 31st Jan *****
-	*	sign up and sign in form could be in the centre -	
-			-	because there are a lot of black space in the right side
-	*	sign up and sign in form should not exists together
+
 	*	should have some realistic usernames, and data
-	*	should not using capital letters in add list items
+
+	Done	*	sign up and sign in form could be in the centre -	
+			-	because there are a lot of black space in the right side
+	Done	*	sign up and sign in form should not exists together
+	Done	*	should not using capital letters in add list items
+	
 

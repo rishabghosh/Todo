@@ -1,4 +1,4 @@
-const { getFilePath, getFilePathForUser } = require("./utils.js");
+const { getFilePath, getFilePathForUser, getCookie } = require("./utils.js");
 const { ERROR_MESSAGE } = require("./constants.js");
 const fs = require("fs");
 
@@ -47,7 +47,7 @@ const serveFiles = function(fs, req, res) {
 };
 
 const useCookies = function(fs, req, res) {
-  const cookie = req.headers.cookie;
+  const cookie = getCookie(req);
   if (cookie != undefined && cookie != "username=") {
     redirect(res, "/homepage");
     return;
@@ -57,8 +57,8 @@ const useCookies = function(fs, req, res) {
 
 const logRequest = function(req, res, next) {
   // console.log("\n------ LOGS -------\n");
-  // console.log("requested method ->", req.method);
-  // console.log("requested url -> ", req.url);
+  console.log("requested method ->", req.method);
+  console.log("requested url -> ", req.url);
   // console.log("headers ->", JSON.stringify(req.headers, null, 2));
   // console.log("body ->", req.body);
   // console.log("\n ------ END ------- \n");
@@ -74,7 +74,7 @@ const homepageFiles = [
 ];
 
 const handleForbiddenRequests = function(req, res, next) {
-  const cookie = req.headers.cookie;
+  const cookie = getCookie(req);
   if (!homepageFiles.includes(req.url)) {
     if (cookie === undefined || cookie === "username=") {
       redirect(res, "/");
@@ -85,12 +85,12 @@ const handleForbiddenRequests = function(req, res, next) {
 };
 
 const checkCookieValidation = function(req, res, next) {
-  const cookie = req.headers.cookie;
+  const cookie = getCookie(req);
   if (cookie !== undefined && cookie !== "username=") {
     const username = cookie.split("=")[1];
     const path = getFilePathForUser(username);
     if (!fs.existsSync(path)) {
-      res.setHeader("Set-Cookie", "username=; expires=\"\"");
+      res.setHeader("Set-Cookie", "username=");
       redirect(res, "/");
       return;
     }

@@ -4,7 +4,7 @@ const placeholders = require("./placeholders.js");
 const TodoList = require("./todoList.js");
 const Todo = require("./todo.js");
 const USERS = require("../dataBase/users.json");
-const { sendData, redirect, invalidRequest } = require("./requestHandlers.js");
+const { sendData, redirect } = require("./requestHandlers.js");
 const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");
 
 const {
@@ -19,7 +19,7 @@ const {
 
 const WRITER = fs.writeFileSync;
 
-const getPreviousTodos = function(req, res) {
+const getPreviousTodos = function(req) {
   const username = getUserName(req);
   const path = getFilePathForUser(username);
   const previousTodos = fs.readFileSync(path, "utf8");
@@ -52,11 +52,11 @@ const getTodoTable = function(totalTodoLists) {
     .join(EMPTY_STRING);
 };
 
-const addTodoList = function(req, res) {
-  const totalTodoLists = getPreviousTodos(req, res);
-  addNewTodo(req, totalTodoLists);
-  redirect(res, "/homepage");
-};
+// const addTodoList = function(req, res) {
+//   const totalTodoLists = getPreviousTodos(req, res);
+//   addNewTodo(req, totalTodoLists);
+//   redirect(res, "/homepage");
+// };
 
 const renderHomepage = function(content, req, res) {
   const totalTodoLists = getPreviousTodos(req, res);
@@ -114,5 +114,7 @@ const addNewItem = function(req, totalTodoLists, currentTodoList) {
 module.exports = {
   renderHomepage,
   renderTodoItemsPage,
-  addTodoList
+  // addTodoList,
+  getPreviousTodos,
+  getTodoTable
 };

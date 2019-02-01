@@ -42,6 +42,8 @@ const getUserName = function(req) {
   return req.headers.cookie.split("=")[1];
 };
 
+const getCookie = req => req.headers.cookie;
+
 const getNameOfUser = function(Users, username) {
   const selectedUser = Users[username];
   return selectedUser.name;
@@ -56,5 +58,6 @@ module.exports = {
   withAnchorTag,
   getCurrentId,
   getUserName,
-  getNameOfUser
+  getNameOfUser,
+  getCookie
 };

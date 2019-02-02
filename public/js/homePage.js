@@ -1,7 +1,7 @@
 const updateList = function() {
   const list = document.getElementById("title").value;
   console.log(list);
-  fetch("/getTodoList", {
+  fetch("/todoList", {
     method: "POST",
     body: list
   })
@@ -21,7 +21,7 @@ const updateItems = function() {
     let URL = document.URL.split("/");
     let urlLength = URL.length;
     let listId = URL[urlLength - 1];
-    fetch("/getTodoItems", {
+    fetch("/todoItems", {
       method: "POST",
       body: `${list},${listId}`
     })

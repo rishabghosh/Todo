@@ -1,7 +1,5 @@
 const fs = require("fs");
-const readArgs = require("./parser.js");
 const placeholders = require("./placeholders.js");
-const Todo = require("./todo.js");
 const USERS = require("../dataBase/users.json");
 const { sendData } = require("./requestHandlers.js");
 const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");

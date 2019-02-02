@@ -3,14 +3,17 @@ const { ManageHandlers } = require("./webFramework.js");
 const { createCache } = require("./cache.js");
 const storeSignUpCredentials = require("./signUp.js");
 const { logOut, checkLoginCredentials } = require("./manageSessions.js");
+
 const {
   getCurrentId,
   getUserName,
   getFilePathForUser,
   writeJsonData
 } = require("./utils.js");
+
 const TodoList = require("./todoList.js");
 const Todo = require("./todo.js");
+
 const {
   renderHomepage,
   renderTodoItemsPage,
@@ -18,6 +21,7 @@ const {
   getTodoTable,
   getItemTable
 } = require("./renderPages.js");
+
 const { HOMEPAGE_PATH, TODOITEMS_PATH } = require("./constants.js");
 
 const {
@@ -27,7 +31,6 @@ const {
   useCookies,
   handleForbiddenRequests,
   checkCookieValidation,
-  redirect,
   sendData
 } = require("./requestHandlers.js");
 
@@ -44,10 +47,8 @@ const getTodoList = function(req, res) {
   totalTodoLists[currentId] = todoList;
   const username = getUserName(req);
   const path = getFilePathForUser(username);
-  console.log("*********", totalTodoLists);
   writeJsonData(path, totalTodoLists, WRITER);
-  console.log(totalTodoLists);
-  let message = "<table id=\"todo_table\"><tr> <td>Your Lists</td> </tr>";
+  let message = '<table id="todo_table"><tr> <td>Your Lists</td> </tr>';
   message += getTodoTable(totalTodoLists);
   sendData(req, res, message);
 };
@@ -57,12 +58,11 @@ const getTodoItems = function(req, res) {
   const todoList = req.body.split(",")[1];
   const todo = new Todo(totalTodoLists[todoList]);
   const todoItem = req.body.split(",")[0];
-  console.log(todoList, todoItem);
   todo.addItems(todoItem);
   const username = getUserName(req);
   const path = getFilePathForUser(username);
   writeJsonData(path, totalTodoLists, WRITER);
-  let message = "<table id=\"todo_table\"><tr> <td>Your Lists</td> </tr>";
+  let message = '<table id="todo_table"><tr> <td>Your Lists</td> </tr>';
   message += getItemTable(totalTodoLists[todoList]);
   sendData(req, res, message);
 };
@@ -78,10 +78,12 @@ const app = function(req, res) {
   manageHandlers.post("/login", checkLoginCredentials);
   manageHandlers.post("/signup", storeSignUpCredentials);
   manageHandlers.post("/logout", logOut);
-  manageHandlers.get("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
-  manageHandlers.post("/getTodoList", getTodoList);
-  manageHandlers.post("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
-  manageHandlers.post("/getTodoItems", getTodoItems);
+  manageHandlers.post("/todoList", getTodoList);
+  manageHandlers.get(
+    /\/homepage|\/homepage?/,
+      renderHomepage.bind(null, HOMEPAGE_DATA)
+    );
+  manageHandlers.post("/todoItems", getTodoItems);
   manageHandlers.use(serveFiles.bind(null, fs));
   manageHandlers.handleRequest(req, res);
 };

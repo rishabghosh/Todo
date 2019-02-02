@@ -4,6 +4,7 @@ const hasOnlyHandler = function(route) {
 
 const isMatching = function(req, route) {
   if (hasOnlyHandler(route)) return true;
+  if (route.url instanceof RegExp && route.url.test(req.url)) return true;
   return req.url === route.url && req.method === route.method;
 };
 

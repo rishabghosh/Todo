@@ -10,12 +10,13 @@ const {
   writeJsonData
 } = require("./utils.js");
 const TodoList = require("./todoList.js");
-
+const Todo = require("./todo.js");
 const {
   renderHomepage,
   renderTodoItemsPage,
   getPreviousTodos,
-  getTodoTable
+  getTodoTable,
+  getItemTable
 } = require("./renderPages.js");
 const { HOMEPAGE_PATH, TODOITEMS_PATH } = require("./constants.js");
 
@@ -51,6 +52,21 @@ const getTodoList = function(req, res) {
   sendData(req, res, message);
 };
 
+const getTodoItems = function(req, res) {
+  const totalTodoLists = getPreviousTodos(req, res);
+  const todoList = req.body.split(",")[1];
+  const todo = new Todo(totalTodoLists[todoList]);
+  const todoItem = req.body.split(",")[0];
+  console.log(todoList, todoItem);
+  todo.addItems(todoItem);
+  const username = getUserName(req);
+  const path = getFilePathForUser(username);
+  writeJsonData(path, totalTodoLists, WRITER);
+  let message = "<table id=\"todo_table\"><tr> <td>Your Lists</td> </tr>";
+  message += getItemTable(totalTodoLists[todoList]);
+  sendData(req, res, message);
+};
+
 const app = function(req, res) {
   const manageHandlers = new ManageHandlers();
   manageHandlers.use(readBody);
@@ -65,6 +81,7 @@ const app = function(req, res) {
   manageHandlers.get("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
   manageHandlers.post("/getTodoList", getTodoList);
   manageHandlers.post("/homepage", renderHomepage.bind(null, HOMEPAGE_DATA));
+  manageHandlers.post("/getTodoItems", getTodoItems);
   manageHandlers.use(serveFiles.bind(null, fs));
   manageHandlers.handleRequest(req, res);
 };

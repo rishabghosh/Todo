@@ -3,6 +3,7 @@
 
 <head>
 	<title>Todo-Items</title>
+	<script src="/js/homePage.js"></script>
 	<link rel="stylesheet" type="text/css" href="style/todo_items.css" />
 </head>
 
@@ -28,15 +29,15 @@
 			</table>
 		</div>
 
-		<form method="POST" action="" class="todo_form">
-			<h2>
-				Current List:
-				<!--todo_list_tilte-->
-			</h2>
-			<h2> Add New Item </h2>
-			<p> <textarea name="Title" id="title" rows="2" cols="100" required></textarea> </p>
-			<p> <input type="submit" value="Submit" /> </p>
-		</form>
+		<!-- <form method="POST" action="" class="todo_form"> -->
+		<h2>
+			Current List:
+			<!--todo_list_tilte-->
+		</h2>
+		<h2> Add New Item </h2>
+		<p> <textarea name="Title" id="title" rows="2" cols="100" required></textarea> </p>
+		<p> <input type="button" value="Submit" onclick="updateItems()" /> </p>
+		<!-- </form> -->
 
 	</div>
 

@@ -1,42 +1,25 @@
 const fs = require("fs");
 const readArgs = require("./parser.js");
 const placeholders = require("./placeholders.js");
-const TodoList = require("./todoList.js");
 const Todo = require("./todo.js");
 const USERS = require("../dataBase/users.json");
-const { sendData, redirect } = require("./requestHandlers.js");
+const { sendData } = require("./requestHandlers.js");
 const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");
 
 const {
-  writeJsonData,
   withTag,
   getFilePathForUser,
   withAnchorTag,
-  getCurrentId,
   getUserName,
   getNameOfUser
 } = require("./utils.js");
 
-const WRITER = fs.writeFileSync;
 
 const getPreviousTodos = function(req) {
   const username = getUserName(req);
   const path = getFilePathForUser(username);
   const previousTodos = fs.readFileSync(path, "utf8");
   return JSON.parse(previousTodos);
-};
-
-const addNewTodo = function(req, totalTodoLists) {
-  const currentArg = readArgs(req.body);
-  if (currentArg.hasOwnProperty("title")) {
-    const todoList = new TodoList(currentArg.title);
-    const currentId = getCurrentId(totalTodoLists);
-    totalTodoLists[currentId] = todoList;
-    const username = getUserName(req);
-    const path = getFilePathForUser(username);
-    console.log("*********", totalTodoLists);
-    writeJsonData(path, totalTodoLists, WRITER);
-  }
 };
 
 const getTodoTable = function(totalTodoLists) {
@@ -52,12 +35,6 @@ const getTodoTable = function(totalTodoLists) {
     .join(EMPTY_STRING);
 };
 
-// const addTodoList = function(req, res) {
-//   const totalTodoLists = getPreviousTodos(req, res);
-//   addNewTodo(req, totalTodoLists);
-//   redirect(res, "/homepage");
-// };
-
 const renderHomepage = function(content, req, res) {
   const totalTodoLists = getPreviousTodos(req, res);
   const username = getUserName(req);
@@ -70,6 +47,7 @@ const renderHomepage = function(content, req, res) {
 
 const getItemTable = function(currentTodoList) {
   const items = currentTodoList.item;
+  console.log(items);
   return items
     .map(item => {
       const title = withTag(TD, item);
@@ -85,7 +63,6 @@ const renderTodoItemsPage = function(content, req, res, next) {
     const id = req.url.slice(1);
     if (allLists.includes(id)) {
       const currentTodoList = totalTodoLists[id];
-      if (req.method === POST) addNewItem(req, totalTodoLists, currentTodoList);
       const todoListTitle = currentTodoList.title;
       let message = content.replace(
         placeholders.forTodoListTitle,
@@ -102,19 +79,10 @@ const renderTodoItemsPage = function(content, req, res, next) {
   next();
 };
 
-const addNewItem = function(req, totalTodoLists, currentTodoList) {
-  const currentArg = readArgs(req.body);
-  const todo = new Todo(currentTodoList);
-  todo.addItems(currentArg.Title);
-  const username = getUserName(req);
-  const path = getFilePathForUser(username);
-  writeJsonData(path, totalTodoLists, WRITER);
-};
-
 module.exports = {
   renderHomepage,
   renderTodoItemsPage,
-  // addTodoList,
   getPreviousTodos,
-  getTodoTable
+  getTodoTable,
+  getItemTable
 };

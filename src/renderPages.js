@@ -2,7 +2,7 @@ const fs = require("fs");
 const placeholders = require("./placeholders.js");
 const USERS = require("../dataBase/users.json");
 const { sendData } = require("./requestHandlers.js");
-const { EMPTY_STRING, ROOT, POST, TD, TR } = require("./constants.js");
+const { EMPTY_STRING, ROOT,  TD, TR } = require("./constants.js");
 
 const {
   withTag,
@@ -45,7 +45,6 @@ const renderHomepage = function(content, req, res) {
 
 const getItemTable = function(currentTodoList) {
   const items = currentTodoList.item;
-  console.log(items);
   return items
     .map(item => {
       const title = withTag(TD, item);

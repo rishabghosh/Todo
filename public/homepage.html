@@ -1,38 +1,57 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Todo-home</title>
+    <link rel="stylesheet" type="text/css" href="/style/homePage.css" />
+    <script src="/js/homePage.js"></script>
+  </head>
 
-<head>
-  <title>Todo-home</title>
-  <link rel="stylesheet" type="text/css" href="/style/homePage.css" />
-  <script src="/js/homePage.js"></script>
-</head>
+  <body>
+    <form method="POST" action="/logout">
+      <label>
+        Profile:
+        <!--user-->
+      </label>
+      <input type="submit" value="Logout" />
+    </form>
 
-<body>
+    <div class="container">
+      <div class="todo_list">
+        <table id="todo_table">
+          <tr>
+            <td>Your Lists</td>
+          </tr>
+          <!--todo_lists-->
+        </table>
+      </div>
 
-  <form method="POST" action="/logout">
-    <label>
-      Profile:
-      <!--user-->
-    </label>
-    <input type="submit" value="Logout" />
-  </form>
-
-  <div class="container">
-
-    <div class="todo_list">
-      <table id="todo_table">
-        <tr>
-          <td>Your Lists</td>
-        </tr>
-        <!--todo_lists-->
-      </table>
+      <h2>Add New List</h2>
+      <p>
+        <textarea
+          name="title"
+          id="title"
+          rows="2"
+          cols="100"
+          required
+        ></textarea>
+      </p>
+      <p>
+        <textarea
+          name="description"
+          id="description"
+          rows="6"
+          cols="100"
+          required
+        ></textarea>
+      </p>
+      <p>
+        <input
+          type="button"
+          value="Submit"
+          id="add_list"
+          onclick="updateList()"
+        />
+      </p>
     </div>
-
-    <h2>Add New List</h2>
-    <p> <textarea name="title" id="title" rows="2" cols="100" required></textarea> </p>
-    <p> <input type="button" value="Submit" id="add_list" onclick="updateList()" /> </p>
-
-  </div>
-</body>
-
+  </body>
 </html>

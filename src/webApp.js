@@ -3,7 +3,6 @@ const { ManageHandlers } = require("./webFramework.js");
 const { createCache } = require("./cache.js");
 const storeSignUpCredentials = require("./signUp.js");
 const { logOut, checkLoginCredentials } = require("./manageSessions.js");
-
 const {
   getCurrentId,
   getUserName,
@@ -40,8 +39,8 @@ const HOMEPAGE_DATA = CACHE[HOMEPAGE_PATH];
 const TODOITEMS_DATA = CACHE[TODOITEMS_PATH];
 
 const getTodoList = function(req, res) {
-  const newTodo = req.body;
-  const todoList = new TodoList(newTodo);
+  const newTodo = JSON.parse(req.body);
+  const todoList = new TodoList(newTodo.list);
   const totalTodoLists = getPreviousTodos(req, res);
   const currentId = getCurrentId(totalTodoLists);
   totalTodoLists[currentId] = todoList;
@@ -81,8 +80,8 @@ const app = function(req, res) {
   manageHandlers.post("/todoList", getTodoList);
   manageHandlers.get(
     /\/homepage|\/homepage?/,
-      renderHomepage.bind(null, HOMEPAGE_DATA)
-    );
+    renderHomepage.bind(null, HOMEPAGE_DATA)
+  );
   manageHandlers.post("/todoItems", getTodoItems);
   manageHandlers.use(serveFiles.bind(null, fs));
   manageHandlers.handleRequest(req, res);

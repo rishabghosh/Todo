@@ -1,14 +1,19 @@
 const fs = require("fs");
 const placeholders = require("./placeholders.js");
 const USERS = require("../dataBase/users.json");
-const { EMPTY_STRING, ROOT,  TD, TR } = require("./constants.js");
+const { EMPTY_STRING, ROOT, TD, TR } = require("./constants.js");
+const WRITER = fs.writeFileSync;
+const TodoList = require("./todoList.js");
+const Todo = require("./todo.js");
 
 const {
   withTag,
   getFilePathForUser,
   withAnchorTag,
   getUserName,
-  getNameOfUser
+  getNameOfUser,
+  getCurrentId,
+  writeJsonData
 } = require("./utils.js");
 
 const getPreviousTodos = function(req) {
@@ -74,10 +79,41 @@ const renderTodoItemsPage = function(content, req, res, next) {
   next();
 };
 
+const getTodoList = function(req, res) {
+  const newTodo = JSON.parse(req.body);
+  const todoList = new TodoList(newTodo.list);
+  const totalTodoLists = getPreviousTodos(req, res);
+  const currentId = getCurrentId(totalTodoLists);
+  totalTodoLists[currentId] = todoList;
+  const username = getUserName(req);
+  const path = getFilePathForUser(username);
+  writeJsonData(path, totalTodoLists, WRITER);
+  let message = '<table id="todo_table"><tr> <td>Your Lists</td> </tr>';
+  message += getTodoTable(totalTodoLists);
+  res.send(message);
+};
+
+const getTodoItems = function(req, res) {
+  const totalTodoLists = getPreviousTodos(req, res);
+  const listAndListId = JSON.parse(req.body);
+  const todoListId = listAndListId.listId;
+  const todo = new Todo(totalTodoLists[todoListId]);
+  const todoItem = listAndListId.list;
+  todo.addItems(todoItem);
+  const username = getUserName(req);
+  const path = getFilePathForUser(username);
+  writeJsonData(path, totalTodoLists, WRITER);
+  let message = '<table id="todo_table"><tr> <td>Your Items</td> </tr>';
+  message += getItemTable(totalTodoLists[todoListId]);
+  res.send(message);
+};
+
 module.exports = {
   renderHomepage,
   renderTodoItemsPage,
   getPreviousTodos,
   getTodoTable,
-  getItemTable
+  getItemTable,
+  getTodoItems,
+  getTodoList
 };

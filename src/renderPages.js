@@ -1,7 +1,6 @@
 const fs = require("fs");
 const placeholders = require("./placeholders.js");
 const USERS = require("../dataBase/users.json");
-const { sendData } = require("./requestHandlers.js");
 const { EMPTY_STRING, ROOT,  TD, TR } = require("./constants.js");
 
 const {
@@ -39,7 +38,7 @@ const renderHomepage = function(content, req, res) {
   const todoTable = getTodoTable(totalTodoLists);
   let message = content.replace(placeholders.forTodoLists, todoTable);
   message = message.replace(placeholders.forNameOfUser, nameOfUser);
-  sendData(req, res, message);
+  res.send(message);
 };
 
 const getItemTable = function(currentTodoList) {
@@ -68,7 +67,7 @@ const renderTodoItemsPage = function(content, req, res, next) {
         placeholders.forTodoItems,
         getItemTable(currentTodoList)
       );
-      sendData(req, res, message);
+      res.send(message);
       return;
     }
   }

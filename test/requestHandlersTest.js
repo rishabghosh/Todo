@@ -6,31 +6,10 @@ const assert = chai.assert;
 const { Request, Response, FileSystem } = require("./simulators.js");
 
 const {
-  sendData,
   invalidRequest,
   readBody,
   serveFiles
 } = require("../src/requestHandlers.js");
-
-describe("sendData", () => {
-  const req = null;
-
-  it("should not modify the response body if sendData is not invoked", () => {
-    const res = new Response();
-    const actualOutput = res.body;
-    const expectedOutput = "";
-    assert.strictEqual(actualOutput, expectedOutput);
-  });
-
-  it("should provided data to the response body if sendData is invoked", () => {
-    const res = new Response();
-    const data = "some data";
-    sendData(req, res, data);
-    const actualOutput = res.body;
-    const expectedOutput = "some data";
-    assert.strictEqual(actualOutput, expectedOutput);
-  });
-});
 
 describe("invalidRequest", () => {
   const req = null;

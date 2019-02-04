@@ -1,12 +1,7 @@
 const { getFilePath, getFilePathForUser, getCookie } = require("./utils.js");
 const { ERROR_MESSAGE } = require("./constants.js");
 const fs = require("fs");
-
-const sendData = function(req, res, data) {
-  res.statusCode = 200;
-  res.write(data);
-  res.end();
-};
+const path = require("path");
 
 const invalidRequest = function(req, res) {
   res.statusCode = 404;
@@ -36,23 +31,26 @@ const readBody = function(req, res, next) {
 };
 
 const serveFiles = function(fs, req, res) {
-  const filePath = getFilePath(req.url);
   fs.readFile(filePath, (error, data) => {
     if (!error) {
-      sendData(req, res, data);
+      res.send(data);
       return;
     }
     invalidRequest(req, res);
   });
 };
 
-const useCookies = function(fs, req, res) {
+const useCookies = function(req, res) {
   const cookie = getCookie(req);
   if (cookie != undefined && cookie != "username=") {
-    redirect(res, "/homepage");
+    res.redirect("/homepage");
     return;
   }
-  serveFiles(fs, req, res);
+  let filepath = `../public${req.url}`;
+  if (req.url === "/") filepath = "../public/index.html";
+  console.log(__dirname);
+  console.log(path.join(__dirname, filepath));
+  res.sendFile(path.join(__dirname, filepath));
 };
 
 const logRequest = function(req, res, next) {
@@ -77,7 +75,7 @@ const handleForbiddenRequests = function(req, res, next) {
   const cookie = getCookie(req);
   if (!homepageFiles.includes(req.url)) {
     if (cookie === undefined || cookie === "username=") {
-      redirect(res, "/");
+      res.redirect("/");
       return;
     }
   }
@@ -91,7 +89,7 @@ const checkCookieValidation = function(req, res, next) {
     const path = getFilePathForUser(username);
     if (!fs.existsSync(path)) {
       res.setHeader("Set-Cookie", "username=");
-      redirect(res, "/");
+      res.redirect("/");
       return;
     }
   }
@@ -101,7 +99,6 @@ const checkCookieValidation = function(req, res, next) {
 module.exports = {
   readBody,
   serveFiles,
-  sendData,
   invalidRequest,
   redirect,
   getFilePath,

@@ -29,8 +29,7 @@ const {
   logRequest,
   useCookies,
   handleForbiddenRequests,
-  checkCookieValidation,
-  sendData
+  checkCookieValidation
 } = require("./requestHandlers.js");
 
 const WRITER = fs.writeFileSync;
@@ -49,7 +48,7 @@ const getTodoList = function(req, res) {
   writeJsonData(path, totalTodoLists, WRITER);
   let message = '<table id="todo_table"><tr> <td>Your Lists</td> </tr>';
   message += getTodoTable(totalTodoLists);
-  sendData(req, res, message);
+  res.send(message);
 };
 
 const getTodoItems = function(req, res) {
@@ -62,9 +61,9 @@ const getTodoItems = function(req, res) {
   const username = getUserName(req);
   const path = getFilePathForUser(username);
   writeJsonData(path, totalTodoLists, WRITER);
-  let message = '<table id="todo_table"><tr> <td>Your Lists</td> </tr>';
+  let message = '<table id="todo_table"><tr> <td>Your Items</td> </tr>';
   message += getItemTable(totalTodoLists[todoListId]);
-  sendData(req, res, message);
+  res.send(message);
 };
 
 const app = express();
@@ -72,7 +71,7 @@ const app = express();
 app.use(readBody);
 app.use(logRequest);
 app.use(checkCookieValidation);
-app.get("/", useCookies.bind(null, fs));
+app.get("/", useCookies);
 app.use(handleForbiddenRequests);
 app.use(renderTodoItemsPage.bind(null, TODOITEMS_DATA));
 app.post("/login", checkLoginCredentials);
@@ -81,6 +80,6 @@ app.post("/logout", logOut);
 app.post("/todoList", getTodoList);
 app.get(/\/homepage|\/homepage?/, renderHomepage.bind(null, HOMEPAGE_DATA));
 app.post("/todoItems", getTodoItems);
-app.use(serveFiles.bind(null, fs));
+app.use(express.static("public"));
 
 module.exports = { app };

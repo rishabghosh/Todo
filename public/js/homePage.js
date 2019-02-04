@@ -3,7 +3,7 @@ const updateList = function() {
   const description = document.getElementById("description").value;
   fetch("/todoList", {
     method: "POST",
-    body: JSON.stringify({ list: list, description: description })
+    body: JSON.stringify({ list, description })
   })
     .then(res => res.text())
     .then(lists => {
@@ -13,7 +13,7 @@ const updateList = function() {
   document.getElementById("title").value = "";
   document.getElementById("description").value = "";
 };
-              
+
 const updateItems = function() {
   const list = document.getElementById("title").value;
   if (list) {
@@ -22,7 +22,7 @@ const updateItems = function() {
     let listId = URL[urlLength - 1];
     fetch("/todoItems", {
       method: "POST",
-      body: `${list},${listId}`
+      body: JSON.stringify({ list, listId })
     })
       .then(res => res.text())
       .then(lists => {

@@ -12,7 +12,6 @@ const {
   getNameOfUser
 } = require("./utils.js");
 
-
 const getPreviousTodos = function(req) {
   const username = getUserName(req);
   const path = getFilePathForUser(username);

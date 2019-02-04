@@ -54,15 +54,16 @@ const getTodoList = function(req, res) {
 
 const getTodoItems = function(req, res) {
   const totalTodoLists = getPreviousTodos(req, res);
-  const todoList = req.body.split(",")[1];
-  const todo = new Todo(totalTodoLists[todoList]);
-  const todoItem = req.body.split(",")[0];
+  const listAndListId = JSON.parse(req.body);
+  const todoListId = listAndListId.listId;
+  const todo = new Todo(totalTodoLists[todoListId]);
+  const todoItem = listAndListId.list;
   todo.addItems(todoItem);
   const username = getUserName(req);
   const path = getFilePathForUser(username);
   writeJsonData(path, totalTodoLists, WRITER);
   let message = '<table id="todo_table"><tr> <td>Your Lists</td> </tr>';
-  message += getItemTable(totalTodoLists[todoList]);
+  message += getItemTable(totalTodoLists[todoListId]);
   sendData(req, res, message);
 };
 

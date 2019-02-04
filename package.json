@@ -23,5 +23,8 @@
     "jshint": "^2.9.7",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.9"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
   }
 }

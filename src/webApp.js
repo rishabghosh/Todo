@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { ManageHandlers } = require("./webFramework.js");
+const express = require("express");
 const { createCache } = require("./cache.js");
 const storeSignUpCredentials = require("./signUp.js");
 const { logOut, checkLoginCredentials } = require("./manageSessions.js");
@@ -67,25 +67,20 @@ const getTodoItems = function(req, res) {
   sendData(req, res, message);
 };
 
-const app = function(req, res) {
-  const manageHandlers = new ManageHandlers();
-  manageHandlers.use(readBody);
-  manageHandlers.use(logRequest);
-  manageHandlers.use(checkCookieValidation);
-  manageHandlers.get("/", useCookies.bind(null, fs));
-  manageHandlers.use(handleForbiddenRequests);
-  manageHandlers.use(renderTodoItemsPage.bind(null, TODOITEMS_DATA));
-  manageHandlers.post("/login", checkLoginCredentials);
-  manageHandlers.post("/signup", storeSignUpCredentials);
-  manageHandlers.post("/logout", logOut);
-  manageHandlers.post("/todoList", getTodoList);
-  manageHandlers.get(
-    /\/homepage|\/homepage?/,
-    renderHomepage.bind(null, HOMEPAGE_DATA)
-  );
-  manageHandlers.post("/todoItems", getTodoItems);
-  manageHandlers.use(serveFiles.bind(null, fs));
-  manageHandlers.handleRequest(req, res);
-};
+const app = express();
+
+app.use(readBody);
+app.use(logRequest);
+app.use(checkCookieValidation);
+app.get("/", useCookies.bind(null, fs));
+app.use(handleForbiddenRequests);
+app.use(renderTodoItemsPage.bind(null, TODOITEMS_DATA));
+app.post("/login", checkLoginCredentials);
+app.post("/signup", storeSignUpCredentials);
+app.post("/logout", logOut);
+app.post("/todoList", getTodoList);
+app.get(/\/homepage|\/homepage?/, renderHomepage.bind(null, HOMEPAGE_DATA));
+app.post("/todoItems", getTodoItems);
+app.use(serveFiles.bind(null, fs));
 
 module.exports = { app };

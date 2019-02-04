@@ -4,66 +4,61 @@
 <head>
 	<title>Todo-Login</title>
 	<link rel="stylesheet" type="text/css" href="style/loginpage.css" />
+	<link href-"https://fonts.google.com/?query=popp&category=Sans+Serif&selection.family=Poppins&thickness=6" rel="stylesheet">
 	<script src="js/loginPage.js"></script>
 </head>
 
 <body>
 
-	<div id="login" class="form_style">
-		<form method="POST" action="/login">
-			<p>
-				<span>Already a user?</span>
-				<h3>Sign-in</h3>
-			</p>
+	<header>
+		TODO
+	</header>
 
-			<p>
-				<label>Username :</label>
-				<input type="text" name="username" required>
-			</p>
+	<main>
 
-			<p>
-				<label>Password :</label>
-				<input type="password" name="password" required>
-			</p>
+		<section id="login">
+			<h1>User Login</h1>
 
-			<p>
+			<form method="POST" action="/login">
+
+				<div class="input_wrapper">
+					<input type="text" name="username" placeholder="Username" class="input100" required>
+					<span class="unicode">&#x1F464</span>
+				</div>
+
+				<div class="input_wrapper">
+					<input type="password" name="password" placeholder="Password" class="input100" required>
+					<span class="unicode">&#x1f512</span>
+				</div>
+
+				<span></span>
 				<input type="submit" value="Login" class="button">
-			</p>
 
-		</form>
-		<span id="sign_up_link">click here to sign-up</span>
-	</div>
+			</form>
 
-	<div id="sign_up" class="form_style">
-		<form method="POST" action="/signup">
-			<p>
-				<span>Don't have an account?</span>
-				<h3>Sign-up</h3>
-			</p>
+			<div id="sign_up_link" class="link">click here to sign-up</div>
+		</section>
 
-			<p>
-				<label>Name :</label>
-				<input name="name" required>
-			</p>
+		<section id="sign_up">
+			<h1>Create Account</h1>
 
-			<p>
-				<label>Username :</label>
-				<input type="text" name="username" required>
-			</p>
+			<form method="POST" action="/signup">
 
-			<p>
-				<label>Password :</label>
-				<input type="password" name="password" required>
-			</p>
+				<input name="name" placeholder="Name" class="input100" required>
+				<input name="username" placeholder="Username" class="input100" required>
 
-			<p>
+				<input type="password" name="password" placeholder="Password" class="input100" required>
+
+				<span></span>
 				<input type="submit" value="Sign Up" class="button">
-			</p>
 
-		</form>
-		<span id="login_link">click here to login</span>
-	</div>
+			</form>
 
+			<div id="login_link" class="link">click here to login</div>
+		</section>
+	</main>
+
+	<footer></footer>
 </body>
 
 </html>

@@ -1,11 +1,11 @@
 const readArgs = require("./parser.js");
-const { redirect, setCookie } = require("./requestHandlers.js");
+const { setCookie } = require("./requestHandlers.js");
 const { ROOT } = require("./constants.js");
 const USERS = require("../dataBase/users.json");
 
 const logOut = function(req, res) {
-  res.setHeader("Set-Cookie", "username=; expires=\"\"");
-  redirect(res, ROOT);
+  res.setHeader("Set-Cookie", 'username=; expires=""');
+  res.redirect(ROOT);
 };
 
 const hasCorrectCredentials = function(credentials) {
@@ -23,10 +23,10 @@ const checkLoginCredentials = function(req, res) {
   if (hasCorrectCredentials(credentials)) {
     let username = credentials.username;
     setCookie(res, username);
-    redirect(res, "/homepage");
+    res.redirect("/homepage");
     return;
   }
-  redirect(res, ROOT);
+  res.redirect(ROOT);
 };
 
 module.exports = {

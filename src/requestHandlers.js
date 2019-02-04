@@ -7,12 +7,6 @@ const setCookie = function(res, cookie) {
   res.setHeader("Set-Cookie", "username=" + cookie);
 };
 
-const redirect = function(res, location) {
-  res.statusCode = 301;
-  res.setHeader("Location", location);
-  res.end();
-};
-
 const readBody = function(req, res, next) {
   let content = "";
   res.statusCode = 200;
@@ -81,7 +75,6 @@ const checkCookieValidation = function(req, res, next) {
 
 module.exports = {
   readBody,
-  redirect,
   getFilePath,
   setCookie,
   logRequest,
